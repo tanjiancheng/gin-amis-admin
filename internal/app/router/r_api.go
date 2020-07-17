@@ -45,6 +45,11 @@ func (a *Router) RegisterAPI(app *gin.Engine) {
 				gPubSetting.GET("", a.SettingAPI.Query)
 			}
 
+			gPubApp := pub.Group("app")
+			{
+				gPubApp.GET(":id", a.AppAPI.Query)
+			}
+
 			pub.POST("/refresh-token", a.LoginAPI.RefreshToken)
 		}
 

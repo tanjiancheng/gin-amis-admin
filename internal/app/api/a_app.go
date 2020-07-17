@@ -87,7 +87,7 @@ func (a *App) Init(c *gin.Context) {
 func (a *App) Query(c *gin.Context) {
 	appId := c.Param("id")
 	if len(appId) <= 0 {
-		appId = ginplus.GetDefaultAppId();
+		appId = ginplus.GetDefaultAppId()
 	}
 	exist, err := a.AppBll.Query(c, appId)
 	if err != nil {

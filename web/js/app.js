@@ -416,7 +416,7 @@
     function checkAppInit($) {
         $.ajax({
             async: true,
-            url: pageSchemaApi + '/api/v1/app/' + getAppId(),
+            url: pageSchemaApi + '/api/v1/pub/app/' + getAppId(),
             type: "GET",
             dataType: "json", //指定服务器返回的数据类型
             //cache: false,
@@ -424,11 +424,12 @@
                 request.setRequestHeader("authorization", getAuthorization());
             },
             success: function (response) {
+                let status = response.status || -1;
                 let isInitApp = response.data;
                 if (response.data === undefined) {
                     isInitApp = false;
                 }
-                if (!isInitApp) {
+                if (status == 0 && !isInitApp) {
                     window.location.href = "/page/wizard.html";
                 }
             }

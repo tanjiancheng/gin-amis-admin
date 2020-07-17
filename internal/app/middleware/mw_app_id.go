@@ -1,10 +1,9 @@
 package middleware
 
 import (
-	"fmt"
-	"github.com/tanjiancheng/gin-amis-admin/internal/app/ginplus"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
+	"github.com/tanjiancheng/gin-amis-admin/internal/app/ginplus"
 	"strings"
 )
 
@@ -26,7 +25,6 @@ func AppIdMiddleware(skippers ...SkipperFunc) gin.HandlerFunc {
 				return defaultName
 			}
 			path := strings.Split(defaultName, "_")
-			fmt.Println(path)
 			oldPath := path[0] + "_" + path[1]
 			newPath := path[0] + "_" + appID
 			return strings.Replace(defaultName, oldPath, newPath, -1)
