@@ -32,5 +32,6 @@ clean:
 
 pack: build
 	rm -rf $(RELEASE_ROOT) && mkdir -p $(RELEASE_SERVER)
-	cp -r $(SERVER_BIN) configs $(RELEASE_SERVER)
-	cd $(RELEASE_ROOT) && tar -cvf $(APP).tar ${APP} && rm -rf ${APP}
+	cp -r $(SERVER_BIN) configs web $(RELEASE_SERVER)
+	cp scripts/Makefile $(RELEASE_SERVER)
+	cd $(RELEASE_ROOT) && tar -zcvf $(APP).tar.gz ${APP} && sudo rm -rf ${APP}

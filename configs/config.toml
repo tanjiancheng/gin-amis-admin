@@ -56,7 +56,7 @@ Format = "text"
 # 日志输出(支持：stdout/stderr/file)
 Output = "stdout"
 # 指定日志输出的文件路径
-OutputFile = "data/gin-admin.log"
+OutputFile = "data/gin-amis-admin.log"
 # 是否启用日志钩子
 EnableHook = false
 # 写入钩子的日志级别
@@ -114,7 +114,7 @@ Enable = true
 # 签名方式(支持：HS512/HS384/HS512)
 SigningMethod = "HS512"
 # 签名key
-SigningKey = "gin-admin"
+SigningKey = "gin-amis-admin"
 # 过期时间（单位秒）
 Expired = 7200
 # 存储(支持：file/redis)
@@ -175,7 +175,7 @@ ExcludedPaths = []
 # 是否开启调试模式
 Debug = true
 # 数据库类型(目前支持的数据库类型：mysql/sqlite3/postgres)
-DBType = "mysql"
+DBType = "sqlite3"
 # 设置连接可以重用的最长时间(单位：秒)
 MaxLifetime = 7200
 # 设置数据库的最大打开连接数
@@ -197,7 +197,7 @@ User = "root"
 # 密码
 Password = "123456"
 # 数据库
-DBName = "gin-admin"
+DBName = "gin-amis-admin"
 # 连接参数
 Parameters = "charset=utf8mb4&parseTime=True&loc=Local&allowNativePasswords=true"
 
@@ -211,13 +211,13 @@ User = "root"
 # 密码
 Password = "123456"
 # 数据库
-DBName = "gin-admin"
+DBName = "gin-amis-admin"
 # SSL模式
 SSLMode = "disable"
 
 [Sqlite3]
 # 数据库路径
-Path = "data/gin-admin.db"
+Path = "data/gin-amis-admin.db"
 
 # mongo需要满足以下条件：
 # 4.0以上版本
@@ -229,9 +229,9 @@ Path = "data/gin-admin.db"
 # StorageEngine(存储引擎)须是wiredTiger (支持文档级别的锁)，4.0以上版本已经默认支持
 [Mongo]
 # 连接地址(mongodb://user:password@localhost:27017/?authSource=admin)
-URI = "mongodb://localhost:27017/?appName=gin-admin"
+URI = "mongodb://localhost:27017/?appName=gin-amis-admin"
 # 数据库
-Database = "gin-admin"
+Database = "gin-amis-admin"
 # 连接超时(单位秒)
 Timeout = 30
 # 集合名前缀
