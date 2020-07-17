@@ -1,0 +1,191 @@
+---
+# 菜单配置初始化(服务启动时会进行数据检查，如果存在则不再初始化)
+- name: 首页
+  icon: fa fa-tachometer
+  router: "/dashboard"
+  sequence: 11
+- name: 系统管理
+  icon: fa fa-cog
+  sequence: 7
+  children:
+    - name: 菜单管理
+      icon: fa fa-bars
+      router: "/system/menu"
+      sequence: 9
+      actions:
+        - code: add
+          name: 新增
+          resources:
+            - method: POST
+              path: "/api/v1/menus"
+        - code: edit
+          name: 编辑
+          resources:
+            - method: GET
+              path: "/api/v1/menus/:id"
+            - method: PUT
+              path: "/api/v1/menus/:id"
+        - code: del
+          name: 删除
+          resources:
+            - method: DELETE
+              path: "/api/v1/menus/:id"
+        - code: query
+          name: 查询
+          resources:
+            - method: GET
+              path: "/api/v1/menus"
+            - method: GET
+              path: "/api/v1/menus.tree"
+    - name: 角色管理
+      icon: fa fa-users
+      router: "/system/role"
+      sequence: 8
+      actions:
+        - code: add
+          name: 新增
+          resources:
+            - method: GET
+              path: "/api/v1/menus.tree"
+            - method: POST
+              path: "/api/v1/roles"
+        - code: edit
+          name: 编辑
+          resources:
+            - method: GET
+              path: "/api/v1/menus.tree"
+            - method: GET
+              path: "/api/v1/roles/:id"
+            - method: PUT
+              path: "/api/v1/roles/:id"
+        - code: del
+          name: 删除
+          resources:
+            - method: DELETE
+              path: "/api/v1/roles/:id"
+        - code: query
+          name: 查询
+          resources:
+            - method: GET
+              path: "/api/v1/roles"
+        - code: disable
+          name: 禁用
+          resources:
+            - method: PATCH
+              path: "/api/v1/roles/:id/disable"
+        - code: enable
+          name: 启用
+          resources:
+            - method: PATCH
+              path: "/api/v1/roles/:id/enable"
+    - name: 用户管理
+      icon: fa fa-user
+      router: "/system/user"
+      sequence: 7
+      actions:
+        - code: add
+          name: 新增
+          resources:
+            - method: GET
+              path: "/api/v1/roles.select"
+            - method: POST
+              path: "/api/v1/users"
+        - code: edit
+          name: 编辑
+          resources:
+            - method: GET
+              path: "/api/v1/roles.select"
+            - method: GET
+              path: "/api/v1/users/:id"
+            - method: PUT
+              path: "/api/v1/users/:id"
+        - code: del
+          name: 删除
+          resources:
+            - method: DELETE
+              path: "/api/v1/users/:id"
+        - code: query
+          name: 查询
+          resources:
+            - method: GET
+              path: "/api/v1/users"
+        - code: disable
+          name: 禁用
+          resources:
+            - method: PATCH
+              path: "/api/v1/users/:id/disable"
+        - code: enable
+          name: 启用
+          resources:
+            - method: PATCH
+              path: "/api/v1/users/:id/enable"
+    - name: 系统配置
+      icon: fa fa-cog
+      router: "/system/setting"
+      sequence: 6
+- name: 在线开发
+  icon: fa fa-pencil
+  sequence: 6
+  children:
+    - name: 页面制作
+      icon: fa fa-file-o
+      router: "/tools/page_manager"
+      sequence: 20
+      actions:
+        - code: add
+          name: 新增
+          resources:
+            - method: POST
+              path: "/api/v1/page_manager"
+        - code: view
+          name: 查看
+          resources:
+            - method: GET
+              path: "/api/v1/page_manager/:id"
+        - code: edit
+          name: 编辑
+          resources:
+            - method: GET
+              path: "/api/v1/page_manager/:id"
+            - method: PUT
+              path: "/api/v1/page_manager/:id"
+        - code: del
+          name: 删除
+          resources:
+            - method: DELETE
+              path: "/api/v1/page_manager/:id"
+        - code: query
+          name: 查询
+          resources:
+            - method: GET
+              path: "/api/v1/page_manager"
+        - code: clone
+          name: 克隆
+          resources:
+            - method: POST
+              path: "/api/v1/page_manager/:id"
+        - code: preview
+          name: 预览
+          resources:
+            - method: GET
+              path: "/api/v1/page_manager/:id"
+        - code: history-preview
+          name: 历史版本
+          resources:
+            - method: GET
+              path: "/api/v1/page_manager/:id/history"
+        - code: push-to-menu
+          name: 发布到菜单
+          resources:
+            - method: GET
+              path: "/api/v1/menus.tree"
+            - method: POST
+              path: "/api/v1/menus"
+    - name: 模板商城
+      icon: fa fa-cart-arrow-down
+      router: "/tools/tpl_store"
+      sequence: 19
+- name: 示例页面
+  icon: fa fa-smile-o
+  router: "/pages/example"
+  sequence: 10

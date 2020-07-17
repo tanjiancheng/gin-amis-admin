@@ -1,0 +1,64 @@
+html, body {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.app-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.navbar-nav .navbar-btn {
+    padding: 8px;
+}
+
+.amis-scope .a-Modal {
+    z-index: 1100 !important;
+}
+
+.a-Modal--2th {
+    z-index: 1400 !important;
+}
+
+.a-Modal--3th {
+    z-index: 1500 !important;
+}
+
+.toolbar {
+    position: relative;
+    top: -20px;
+}
+
+#toolbar .user-name {
+    border-color: white;
+    box-shadow: unset;
+}
+
+#toolbar .user-name:hover {
+    border-color: white;
+    box-shadow: unset;
+    background-color: white;
+}
+
+.view-page-source {
+    position: relative;
+    top: -58px;
+    left: 30px;
+    border-color: white !important;
+    box-shadow: unset !important;
+}
+
+.goto-github {
+    position: relative;
+    top: -57px;
+    left: 26px;
+    border-color: white !important;
+    box-shadow: unset !important;
+}
+.goto-github a {
+    color: unset!important;
+}

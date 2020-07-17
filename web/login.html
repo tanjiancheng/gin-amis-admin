@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="author" content="Kodinger">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>后台登录</title>
+	<link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/css/login.css">
+</head>
+
+<body class="my-login-page">
+	<section class="h-100">
+		<div class="container h-100">
+			<div class="row justify-content-md-center h-100">
+				<div class="card-wrapper">
+					<div class="brand">
+						<img src="/img/logo.jpg" alt="logo">
+					</div>
+					<div class="card fat">
+						<div class="card-body">
+							<h4 class="card-title">后台登录</h4>
+							<form method="POST" class="my-login-validation" novalidate="">
+								<div class="form-group" style="display: none" id="alert-tips">
+									<div class="alert alert-warning alert-dismissible" role="alert">
+										<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+										<span id="alert-tips-text"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<input id="user_name" type="text" class="form-control" name="user_name" value="" placeholder="请输入用户名" required autofocus>
+									<div class="invalid-feedback">
+										用户名不能为空
+									</div>
+								</div>
+
+								<div class="form-group">
+									<input id="password" type="password" class="form-control" name="password" placeholder="请输入密码" required data-eye>
+								    <div class="invalid-feedback">
+										密码不能为空
+							    	</div>
+								</div>
+
+								<div class="form-group">
+									<div class="row">
+										<div class="col-md-6">
+											<input id="captcha_id" type="hidden" class="form-control" name="captcha_id">
+											<input id="captcha" type="text" class="form-control" name="captcha_code" required>
+											<div class="invalid-feedback">
+												验证码不能为空
+											</div>
+										</div>
+										<div class="col-md-6">
+											<img id="captcha_img" alt="验证码" style="max-width: 100%; max-height: 100%;">
+										</div>
+									</div>
+
+								</div>
+
+								<div class="form-group m-0">
+									<button type="submit" class="btn btn-primary btn-block">
+										登录
+									</button>
+								</div>
+							</form>
+						</div>
+					</div>
+					<div class="footer">
+						Copyright &copy; 2020
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script src="/js/config.js"></script>
+	<script src="/js/common.js"></script>
+	<script src="/js/store2.min.js"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/blueimp-md5/2.16.0/js/md5.min.js"></script>
+	<script src="/js/login.js"></script>
+</body>
+</html>

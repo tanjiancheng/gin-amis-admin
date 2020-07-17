@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Dashboard</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+    <link rel="stylesheet" href="/node_modules/amis/sdk/sdk.css"/>
+    <link rel="stylesheet" href="/css/style.css"/>
+</head>
+<!-- 这个一定要记得加，否则导航部分没样式 -->
+<body class="amis-scope">
+<div
+        class="a-Layout a-Layout--withAside a-Layout--headerFixed a-Layout--asideFixed a-Layout--noFooter"
+>
+    <div class="a-Layout-header">
+        <div>
+            <div class="a-Layout-brandBar">
+                <button class="pull-right visible-xs">
+                    <i class="glyphicon glyphicon-align-justify"></i>
+                </button>
+                <div class="a-Layout-brand">
+                    <i class="platform-logo"></i>
+                    <span class="hidden-folded m-l-sm platform-name"></span>
+                </div>
+            </div>
+            <div class="a-Layout-headerBar">
+                <div class="nav navbar-nav hidden-xs">
+                    <button
+                            id="aside-toggler"
+                            type="button"
+                            class="a-Button a-Button--link a-Button--iconOnly navbar-btn"
+                    >
+                        <i class="fa fa-dedent"></i>
+                    </button>
+                </div>
+                <div class="hidden-xs p-t-sm pull-right">
+                    <div class="dropdown">
+                <span
+                ><span class="pull-right m-b-n-sm m-l-sm"
+                    ><span><i class="iconfont icon-admin"></i></span
+                        ><i class="on md b-white bottom"></i></span
+                    ><span class="hidden-sm hidden-md">admin</span
+                    ><b class="caret"></b
+                    ></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="a-Layout-aside">
+        <div class="a-Layout-asideWrap">
+            <div id="asideInner" class="a-Layout-asideInner">
+                <!--导航部分-->
+                <nav class="a-AsideNav">
+                    <ul class="a-AsideNav-list">
+                        <li class="a-AsideNav-label"><span>导航</span></li>
+                        <div id="page-defined"></div>
+                    </ul>
+                </nav>
+                <!--导航结束-->
+            </div>
+        </div>
+    </div>
+    <div class="a-Layout-content" role="main">
+        <div id="main" class="a-Layout-body"></div>
+    </div>
+</div>
+<script src="/js/config.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/store2.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/blueimp-md5/2.16.0/js/md5.min.js"></script>
+<script src="/node_modules/amis/sdk/sdk.js"></script>
+
+<!-- 这个 js 主要包含一些简单导航边栏点击效果。 -->
+<script src="/js/app.js"></script>
+<script type="text/javascript">
+    (function () {
+        let id = getUrlParam('id');
+
+        //加载菜单
+        function loadMenu(id, type) {
+            let amis = amisRequire("amis/embed");
+            let url = pageSchemaApi + "/api/v1/page_manager/" + id;
+            if (type.length <= 0) {
+                type = getUrlParam('type') || "";
+            }
+            if (type === 'history') {
+                url = pageSchemaApi + "/api/v1/page_version_history/" + id;
+            }
+            $.ajax({
+                url: url,
+                type: "GET",
+                dataType: "json",
+                success: function (response) {
+                    let item = response.data;
+                    let source, page;
+                    if (type === 'history') {
+                        let pageManagerInfo = $.parseJSON(item.page_manger_info);
+                        source = $.parseJSON(pageManagerInfo.source);
+                        page = pageManagerInfo.identify || "";
+                    } else {
+                        source = $.parseJSON(item.source);
+                        page = item.identify || "";
+                    }
+
+                    let html = '';
+                    html += "<li class=\"a-AsideNav-item\">\n" +
+                        "       <a href=\"javascript:void(0);\" class=\"defined-nav-menu\" data-type=\"" + type + "\" data-id=\"" + item['id'] + "\">\n" +
+                        "           <i class=\"a-AsideNav-itemIcon " + item['icon'] + "\"></i>\n" +
+                        "           <span class=\"a-AsideNav-itemLabel\">" + item['name'] + "</span>\n" +
+                        "       </a>\n" +
+                        "   </li>";
+                    $("#page-defined").html(html);
+
+                    amis.embed("#main", source, {
+                        "data": {
+                            "_authorization": getAuthorization(),
+                            "_page_name": page,
+                            "_page_schema_api": pageSchemaApi
+                        }
+                    });
+                }
+            });
+        }
+
+        loadMenu(id, "");
+
+        $(document.body).on('click', '.defined-nav-menu', function () {
+            let id = $(this).data('id');
+            let type = $(this).data('type');
+            loadMenu(id, type);
+        });
+
+    })();
+</script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Dashboard</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+    <link rel="stylesheet" href="/node_modules/amis/sdk/sdk.css"/>
+    <link rel="stylesheet" href="/css/style.css"/>
+</head>
+<!-- 这个一定要记得加，否则导航部分没样式 -->
+<body class="amis-scope">
+<div
+        class="a-Layout a-Layout--withAside a-Layout--headerFixed a-Layout--asideFixed a-Layout--noFooter"
+>
+    <div class="a-Layout-header">
+        <div>
+            <div class="a-Layout-brandBar">
+                <button class="pull-right visible-xs">
+                    <i class="glyphicon glyphicon-align-justify"></i>
+                </button>
+                <div class="a-Layout-brand">
+                    <i class="platform-logo"></i>
+                    <span class="hidden-folded m-l-sm platform-name"></span>
+                </div>
+            </div>
+            <div class="a-Layout-headerBar">
+                <div class="nav navbar-nav hidden-xs">
+                    <button
+                            id="aside-toggler"
+                            type="button"
+                            class="a-Button a-Button--link a-Button--iconOnly navbar-btn"
+                    >
+                        <i class="fa fa-dedent"></i>
+                    </button>
+                    <span id="view-page-source"></span>
+                </div>
+                <div class="hidden-xs p-t-sm pull-right">
+                    <div class="dropdown">
+                        <span>
+                            <span class="pull-right m-b-n-sm m-l-sm">
+                            <span>
+                                <i class="iconfont icon-admin"></i>
+                            </span>
+                                <i class="on md b-white bottom"></i>
+                            </span>
+                            <span class="hidden-sm hidden-md" id="toolbar"></span>
+                            <!-- <b class="caret"></b>-->
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="a-Layout-aside">
+        <div class="a-Layout-asideWrap">
+            <div id="asideInner" class="a-Layout-asideInner">
+                <!--导航部分-->
+                <nav class="a-AsideNav">
+                    <ul class="a-AsideNav-list" id="nav-menu">
+                    </ul>
+                </nav>
+                <!--导航结束-->
+            </div>
+        </div>
+    </div>
+    <div class="a-Layout-content" role="main">
+        <div id="main" class="a-Layout-body"></div>
+    </div>
+</div>
+<script src="/js/config.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/store2.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/blueimp-md5/2.16.0/js/md5.min.js"></script>
+<script src="/node_modules/amis/sdk/sdk.js"></script>
+
+<!-- 这个 js 主要包含一些简单导航边栏点击效果。 -->
+<script src="/js/app.js"></script>
+</body>
+</html>
