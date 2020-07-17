@@ -56,7 +56,7 @@ $ make start
 $ go run cmd/gin-admin/main.go web -c ./configs/config.toml -m ./configs/model.conf --menu ./configs/menu.yaml --page ./configs/page_manager.yaml
 ```
 
-> 启动成功之后，可在浏览器中输入地址进行访问：[http://127.0.0.1:10088(http://127.0.0.1:10088)
+> 启动成功之后，可在浏览器中输入地址进行访问：[http://127.0.0.1:10088](http://127.0.0.1:10088)
 
 
 ## 特别感谢
