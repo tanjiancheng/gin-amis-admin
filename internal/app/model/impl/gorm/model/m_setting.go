@@ -3,12 +3,12 @@ package model
 import (
 	"context"
 
+	"github.com/google/wire"
+	"github.com/jinzhu/gorm"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/model"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/model/impl/gorm/entity"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/schema"
 	"github.com/tanjiancheng/gin-amis-admin/pkg/errors"
-	"github.com/google/wire"
-	"github.com/jinzhu/gorm"
 )
 
 var _ model.ISetting = (*Setting)(nil)
@@ -71,7 +71,8 @@ func (a *Setting) Delete(ctx context.Context, id string) error {
 }
 
 func (a *Setting) Truncate(ctx context.Context) error {
-	db := entity.GetSettingDB(ctx, a.DB).Exec("truncate table " + (entity.Setting{}).TableName())
+	db := entity.GetSettingDB(ctx, a.DB).Delete(entity.Setting{})
+	//db := entity.GetSettingDB(ctx, a.DB).Exec("truncate table " + (entity.Setting{}).TableName())
 	if db.Error != nil {
 		return db.Error
 	}
