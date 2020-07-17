@@ -424,7 +424,12 @@
                 request.setRequestHeader("authorization", getAuthorization());
             },
             success: function (response) {
-                let status = response.status || -1;
+                let status = response.status;
+                if (response.status == undefined) {
+                    status = -1
+                }
+
+                console.log(status);
                 let isInitApp = response.data;
                 if (response.data === undefined) {
                     isInitApp = false;
