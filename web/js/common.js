@@ -14,6 +14,7 @@ function getSetting() {
         dataType: "json", //指定服务器返回的数据类型
         beforeSend: function (request) {
             request.setRequestHeader("X-App-Id", getAppId());
+            request.setRequestHeader("authorization", getAuthorization());
         },
         success: function (response) {
             setting = response.data || {};

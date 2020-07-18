@@ -91,6 +91,7 @@ $(function () {
         let platformName = setting.platform_name || '后台系统';
         if (platformName.length > 0) {
             $(".card-title").text(platformName);
+            $("title").text(platformName+"-登录");
         }
     }
 

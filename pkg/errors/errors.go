@@ -20,6 +20,7 @@ var (
 	ErrInvalidParent           = New400Response("无效的父级节点")
 	ErrNotAllowDeleteWithChild = New400Response("含有子级，不能删除")
 	ErrNotAllowDelete          = New400Response("资源不允许删除")
+	ErrNotAllowUpdate          = New400Response("资源不允许更新")
 	ErrInvalidUserName         = New400Response("无效的用户名")
 	ErrInvalidPassword         = New400Response("无效的密码")
 	ErrInvalidUser             = New400Response("无效的用户")

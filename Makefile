@@ -43,6 +43,3 @@ pack-darwin: build-darwin
 	cp scripts/pack/* $(RELEASE_SERVER)
 	mv $(RELEASE_SERVER)/$(APP)-darwin-10.6-amd64 $(RELEASE_SERVER)/$(APP)
 	cd $(RELEASE_ROOT) && tar -zcvf $(APP)-darwin-amd64.tar.gz ${APP} && sudo rm -rf ${APP}
-
-
-

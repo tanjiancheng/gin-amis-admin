@@ -8,11 +8,11 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/google/wire"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/bll"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/model"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/schema"
 	"github.com/tanjiancheng/gin-amis-admin/pkg/util"
-	"github.com/google/wire"
 )
 
 var _ bll.IPageManager = (*PageManager)(nil)
@@ -126,6 +126,18 @@ func (a *PageManager) Update(ctx context.Context, id string, item schema.PageMan
 	}
 	item.ID = oldItem.ID
 	item.UpdateTime = time.Now().Unix()
+
+	//带有以下标识的页面不能更新
+	cantNotUpdateIdentify := []string{
+		"/tools/page_manager",
+	}
+
+	for _, item := range cantNotUpdateIdentify {
+		if item == oldItem.Identify {
+			return errors.ErrNotAllowUpdate
+		}
+	}
+
 	err = ExecTrans(ctx, a.TransModel, func(ctx context.Context) error {
 		pageMangerInfo, _ := json.Marshal(oldItem)
 		pageVersionHistory := schema.PageVersionHistory{

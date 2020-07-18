@@ -3,10 +3,56 @@
     //当前权限actions
     let permissionActions = [];
     let setting = {};
+    let menu = {};
 
     //获取系统配置
     function initSetting($) {
         setting = getSetting();
+    }
+
+    function initMenuAndPermissionActions($) {
+        $.ajax({
+            async: false,
+            url: pageSchemaApi + '/api/v1/pub/current/menutree',
+            type: "GET",
+            dataType: "json", //指定服务器返回的数据类型
+            beforeSend: function (request) {
+                request.setRequestHeader("authorization", getAuthorization());
+            },
+            success: function (response) {
+                menu = response.list || {};
+                let list = menu;
+                for (let i in list) {
+                    let menuItem = list[i];
+                    let menuItemActions = menuItem.actions;  //存储权限actions列表
+                    if (menuItemActions != undefined) {
+                        for (let i in menuItemActions) {
+                            let actionsCode = menuItemActions[i].code;
+                            permissionActions.push(menuItemRoute + "::" + actionsCode);
+                        }
+                    }
+                    if (menuItem.children != undefined) {
+                        for (let i in menuItem.children) {
+                            let firstChildrenItem = menuItem.children[i];
+                            let firstChilerenItemRouter = firstChildrenItem.router;
+                            let firstChar = firstChilerenItemRouter.substr(0, 1);
+                            if (firstChar !== '/') {
+                                firstChilerenItemRouter = '/'.firstChilerenItemRouter;
+                            }
+
+
+                            let firstChildrenItemActions = firstChildrenItem.actions;  //存储权限actions列表
+                            if (firstChildrenItemActions != undefined) {
+                                for (let i in firstChildrenItemActions) {
+                                    let firstChildrenActionsCode = firstChildrenItemActions[i].code;
+                                    permissionActions.push(firstChilerenItemRouter + "::" + firstChildrenActionsCode);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
     //初始化平台信息
@@ -18,6 +64,7 @@
         }
         if (platformName.length > 0) {
             $(".platform-name").text(platformName);
+            $("title").text(platformName);
         }
     }
 
@@ -55,112 +102,100 @@
     }
 
     function initNavMenu($) {
-        $.ajax({
-            async: false,
-            url: pageSchemaApi + '/api/v1/pub/current/menutree',
-            type: "GET",
-            dataType: "json", //指定服务器返回的数据类型
-            //cache: false,
-            beforeSend: function (request) {
-                request.setRequestHeader("authorization", getAuthorization());
-            },
-            success: function (response) {
-                let locationHash = window.location.hash;
-                let menuNavHtml = '<li class="a-AsideNav-label"><span>导航</span></li>';
-                let list = response.list;
-                for (let i in list) {
-                    let menuItem = list[i];
-                    let arrowHtml = '<span class="a-AsideNav-itemArrow"></span>';
-                    if (menuItem.children == undefined) {
-                        arrowHtml = '';
-                    }
-                    let menuItemRoute = menuItem.router;
+        let locationHash = window.location.hash;
+        let menuNavHtml = '<li class="a-AsideNav-label"><span>导航</span></li>';
+        let list = menu;
+        for (let i in list) {
+            let menuItem = list[i];
+            let arrowHtml = '<span class="a-AsideNav-itemArrow"></span>';
+            if (menuItem.children == undefined) {
+                arrowHtml = '';
+            }
+            let menuItemRoute = menuItem.router;
 
-                    let menuItemActions = menuItem.actions;  //存储权限actions列表
-                    if (menuItemActions != undefined) {
-                        for (let i in menuItemActions) {
-                            let actionsCode = menuItemActions[i].code;
-                            permissionActions.push(menuItemRoute + "::" + actionsCode);
+            let menuItemActions = menuItem.actions;  //存储权限actions列表
+            if (menuItemActions != undefined) {
+                for (let i in menuItemActions) {
+                    let actionsCode = menuItemActions[i].code;
+                    permissionActions.push(menuItemRoute + "::" + actionsCode);
+                }
+            }
+
+            let isOpen = '';
+            if (menuItemRoute && locationHash.indexOf(menuItemRoute) !== -1) { //检查当前菜单路由是否满足
+                isOpen = 'is-open';
+            } else { //检查子菜单是否满足
+                if (menuItem.children != undefined) {
+                    for (let i in menuItem.children) {
+                        let firstChildrenItem = menuItem.children[i];
+                        let firstChilerenItemRouter = firstChildrenItem.router;
+                        let firstChar = firstChilerenItemRouter.substr(0, 1);
+                        if (firstChar !== '/') {
+                            firstChilerenItemRouter = '/'.firstChilerenItemRouter;
                         }
-                    }
-
-                    let isOpen = '';
-                    if (menuItemRoute && locationHash.indexOf(menuItemRoute) !== -1) { //检查当前菜单路由是否满足
-                        isOpen = 'is-open';
-                    } else { //检查子菜单是否满足
-                        if (menuItem.children != undefined) {
-                            for (let i in menuItem.children) {
-                                let firstChildrenItem = menuItem.children[i];
-                                let firstChilerenItemRouter = firstChildrenItem.router;
-                                let firstChar = firstChilerenItemRouter.substr(0, 1);
-                                if (firstChar !== '/') {
-                                    firstChilerenItemRouter = '/'.firstChilerenItemRouter;
-                                }
 
 
-                                let firstChildrenItemActions = firstChildrenItem.actions;  //存储权限actions列表
-                                if (firstChildrenItemActions != undefined) {
-                                    for (let i in firstChildrenItemActions) {
-                                        let firstChildrenActionsCode = firstChildrenItemActions[i].code;
-                                        permissionActions.push(firstChilerenItemRouter + "::" + firstChildrenActionsCode);
-                                    }
-                                }
-
-                                if (firstChilerenItemRouter && locationHash.indexOf(firstChilerenItemRouter) !== -1) {
-                                    isOpen = 'is-open';
-                                    break;
-                                }
+                        let firstChildrenItemActions = firstChildrenItem.actions;  //存储权限actions列表
+                        if (firstChildrenItemActions != undefined) {
+                            for (let i in firstChildrenItemActions) {
+                                let firstChildrenActionsCode = firstChildrenItemActions[i].code;
+                                permissionActions.push(firstChilerenItemRouter + "::" + firstChildrenActionsCode);
                             }
                         }
-                    }
 
-                    let icon = menuItem.icon || "";
-                    if (arrowHtml === '') {
-                        menuNavHtml += '<li class="a-AsideNav-item ' + isOpen + '">' +
-                            '<a href="/#' + menuItem.router + '" class="nav-menu">' +
-                            '   <i class="a-AsideNav-itemIcon ' + icon + '"></i>' +
-                            '   <span class="a-AsideNav-itemLabel">' + menuItem.name + '</span>' +
-                            '</a>';
-                        '</li>';
-                    } else {
-                        menuNavHtml += '<li class="a-AsideNav-item ' + isOpen + '">' +
-                            '<a>' + arrowHtml +
-                            '   <i class="a-AsideNav-itemIcon ' + icon + '"></i>' +
-                            '   <span class="a-AsideNav-itemLabel">' + menuItem.name + '</span>' +
-                            '</a>';
-                        if (menuItem.children != undefined) {
-                            menuNavHtml += '<ul class="a-AsideNav-subList">';
-                            for (let i in menuItem.children) {
-                                let firstChildrenItem = menuItem.children[i];
-                                let firstChilerenItemRouter = firstChildrenItem.router;
-                                let firstChar = firstChilerenItemRouter.substr(0, 1);
-                                if (firstChar !== '/') {
-                                    firstChilerenItemRouter = '/'.firstChilerenItemRouter;
-                                }
-
-                                let isOpen = '';
-                                if (firstChilerenItemRouter && locationHash.indexOf(firstChilerenItemRouter) !== -1) {
-                                    isOpen = 'is-open is-active';
-                                }
-
-                                menuNavHtml += '    <li class="a-AsideNav-item ' + isOpen + '">';
-                                menuNavHtml += '    <a href="/#' + firstChilerenItemRouter + '" class="nav-menu">';
-                                menuNavHtml += '        <i class="a-AsideNav-itemIcon ' + firstChildrenItem.icon + '"></i>';
-                                menuNavHtml += '        <span class="a-AsideNav-itemLabel">' + firstChildrenItem.name + '</span>';
-                                menuNavHtml += '    </a>';
-                                menuNavHtml += '    </li>';
-                            }
-                            menuNavHtml += '</ul>';
+                        if (firstChilerenItemRouter && locationHash.indexOf(firstChilerenItemRouter) !== -1) {
+                            isOpen = 'is-open';
+                            break;
                         }
-                        menuNavHtml += '</li>';
                     }
                 }
-                $("#nav-menu").html(menuNavHtml);
-
-                //触发当前选中的点击
-                $("#nav-menu").find("[href='/" + locationHash + "']").trigger('click');
             }
-        });
+
+            let icon = menuItem.icon || "";
+            if (arrowHtml === '') {
+                menuNavHtml += '<li class="a-AsideNav-item ' + isOpen + '">' +
+                    '<a href="/#' + menuItem.router + '" class="nav-menu">' +
+                    '   <i class="a-AsideNav-itemIcon ' + icon + '"></i>' +
+                    '   <span class="a-AsideNav-itemLabel">' + menuItem.name + '</span>' +
+                    '</a>';
+                '</li>';
+            } else {
+                menuNavHtml += '<li class="a-AsideNav-item ' + isOpen + '">' +
+                    '<a>' + arrowHtml +
+                    '   <i class="a-AsideNav-itemIcon ' + icon + '"></i>' +
+                    '   <span class="a-AsideNav-itemLabel">' + menuItem.name + '</span>' +
+                    '</a>';
+                if (menuItem.children != undefined) {
+                    menuNavHtml += '<ul class="a-AsideNav-subList">';
+                    for (let i in menuItem.children) {
+                        let firstChildrenItem = menuItem.children[i];
+                        let firstChilerenItemRouter = firstChildrenItem.router;
+                        let firstChar = firstChilerenItemRouter.substr(0, 1);
+                        if (firstChar !== '/') {
+                            firstChilerenItemRouter = '/'.firstChilerenItemRouter;
+                        }
+
+                        let isOpen = '';
+                        if (firstChilerenItemRouter && locationHash.indexOf(firstChilerenItemRouter) !== -1) {
+                            isOpen = 'is-open is-active';
+                        }
+
+                        menuNavHtml += '    <li class="a-AsideNav-item ' + isOpen + '">';
+                        menuNavHtml += '    <a href="/#' + firstChilerenItemRouter + '" class="nav-menu">';
+                        menuNavHtml += '        <i class="a-AsideNav-itemIcon ' + firstChildrenItem.icon + '"></i>';
+                        menuNavHtml += '        <span class="a-AsideNav-itemLabel">' + firstChildrenItem.name + '</span>';
+                        menuNavHtml += '    </a>';
+                        menuNavHtml += '    </li>';
+                    }
+                    menuNavHtml += '</ul>';
+                }
+                menuNavHtml += '</li>';
+            }
+        }
+        $("#nav-menu").html(menuNavHtml);
+
+        //触发当前选中的点击
+        $("#nav-menu").find("[href='/" + locationHash + "']").trigger('click');
     }
 
     //点击菜单加载page数据
@@ -178,7 +213,13 @@
             window.location.hash = page;
             amis.embed("#main", {
                 type: "service",
-                schemaApi: "get:" + pageSchemaApi + "/api/v1/page_manager/route?route=" + page + "&_monitor=$_page_name",
+                schemaApi: {
+                    method: "get",
+                    url: pageSchemaApi + "/api/v1/page_manager/route?route=" + page + "&_monitor=$_page_name",
+                    headers: {
+                        Authorization: getAuthorization()
+                    }
+                },
                 initFetchSchema: true
             }, {
                 "data": {
@@ -411,42 +452,11 @@
         $("#view-page-source").trigger('click');
     }
 
-
-    //判断应用是否初始化
-    function checkAppInit($) {
-        $.ajax({
-            async: true,
-            url: pageSchemaApi + '/api/v1/pub/app/' + getAppId(),
-            type: "GET",
-            dataType: "json", //指定服务器返回的数据类型
-            //cache: false,
-            beforeSend: function (request) {
-                request.setRequestHeader("authorization", getAuthorization());
-            },
-            success: function (response) {
-                let status = response.status;
-                if (response.status == undefined) {
-                    status = -1
-                }
-
-                console.log(status);
-                let isInitApp = response.data;
-                if (response.data === undefined) {
-                    isInitApp = false;
-                }
-                if (status == 0 && !isInitApp) {
-                    window.location.href = "/page/wizard.html";
-                }
-            }
-        })
-    }
-
-
     // 也可以通过其他方式加载 jQuery
     require(["jquery"], function ($) {
         initSetting($);
-        checkAppInit($);
         initPlatformInfo($);
+        initMenuAndPermissionActions($);
         initAsideToggle($);
         initNavClick($);
         initMenuClick($);

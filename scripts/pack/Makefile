@@ -3,7 +3,7 @@
 NOW = $(shell date -u '+%Y%m%d%I%M%S')
 
 APP = gin-amis-admin
-SERVER_BIN = ./${APP}
+SERVER_BIN = ${APP}
 
 all: start
 
