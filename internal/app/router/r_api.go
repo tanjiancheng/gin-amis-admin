@@ -1,8 +1,8 @@
 package router
 
 import (
-	"github.com/tanjiancheng/gin-amis-admin/internal/app/middleware"
 	"github.com/gin-gonic/gin"
+	"github.com/tanjiancheng/gin-amis-admin/internal/app/middleware"
 )
 
 // RegisterAPI register api group router
@@ -48,6 +48,11 @@ func (a *Router) RegisterAPI(app *gin.Engine) {
 			gPubApp := pub.Group("app")
 			{
 				gPubApp.GET(":id", a.AppAPI.Query)
+			}
+
+			gPageManager := pub.Group("page_manager")
+			{
+				gPageManager.GET(":id", a.PageManagerAPI.Get)
 			}
 
 			pub.POST("/refresh-token", a.LoginAPI.RefreshToken)

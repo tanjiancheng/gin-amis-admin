@@ -14,6 +14,8 @@ type IMenu interface {
 	Query(ctx context.Context, params schema.MenuQueryParam, opts ...schema.MenuQueryOptions) (*schema.MenuQueryResult, error)
 	// 查询指定数据
 	Get(ctx context.Context, id string, opts ...schema.MenuQueryOptions) (*schema.Menu, error)
+	// 根据路由查询对应的数据
+	GetByRouter(ctx context.Context, router string) (*schema.Menu, error)
 	// 创建数据
 	Create(ctx context.Context, item schema.Menu) (*schema.IDResult, error)
 	// 更新数据

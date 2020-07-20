@@ -7,37 +7,177 @@
         "$schema": "https://houtai.baidu.com/v2/schemas/page.json",
         "type": "page",
         "title": "使用教程",
-        "body": [
-            {
-                "type": "alert",
-                "level": "success",
-                "body": "基于amis的页面在线开发系统使用教程说明"
-            },
-            {
-                "type": "html",
-                "html": "<h4>1. 新增页面</h4>"
-            },
-            {
-                "type": "panel",
-                "body": "<p></p><p>点击<a>在线开发/页面制作</a>里面的<strong>新增</strong>按钮</a></p><p>填入<strong>页面名称</strong>,<strong>页面标识</strong>,<strong>页面源码</strong></p><p>其中<strong>页面源码</strong>相关内容请到<a href='https://baidu.github.io/amis/form/mode' target='_blank'>amis官网</a>查看对应的组件源码拷贝过来</p><p>点击确定按钮保存</p><p><code>注: 页面名称和页面标识必须要唯一,其中页面标识其实是跟菜单路由一一对应的</code></p><img src='/img/guide/page-add.jpg'/>"
-            },
-    		{
-    			"type": "divider"
-    		},
-    		{
-                "type": "html",
-                "html": "<h4>2. 发布到菜单</h4>"
-            },
-    		{
-                "type": "panel",
-                "body": "<p>新创建的页面怎么才能在菜单里面显示用户可以查看呢？这里需要用到发布到菜单的功能</p><p>点击<a>在线开发/页面制作</a>里面的<strong>发布到菜单</strong>按钮</p><p>补充对应的表单内容,其中如果<strong>上级菜单</strong>不填则默认根菜单，如果有多级菜单，先这里创建后重新发布多一次然后选择上次发布的菜单,以下已创建二级菜单为例:</p><br/></br><p>先创建对应的顶级菜单</p><img src='/img/guide/push-menu-first.jpg'/><br/></br><p>再创建对应的子菜单</p><img src='/img/guide/push-menu-second.jpg'/><p>最终效果:</p><img src='/img/guide/push-menu-result.jpg'/>"
-            },
-    		{
-                "type": "alert",
-                "level": "info",
-                "body": "恭喜你已经完成一个页面的创建流程了！剩下的工作就是提供你的数据接口并修改对应的页面json里面对应的api相关接口保存就可以实时预览页面了，其中如果修改错误还有对应的历史版本可以回滚，请开始你的后台制作吧！"
-            }
-        ]
+        "body": {
+            "type": "tabs",
+            "tabs": [
+                {
+                    "title": "页面制作",
+                    "tab": [
+                        {
+                            "type": "alert",
+                            "level": "success",
+                            "body": "基于amis的页面在线开发系统使用教程说明"
+                        },
+                        {
+                            "type": "html",
+                            "html": "<h4>1. 新增页面</h4>"
+                        },
+                        {
+                            "type": "panel",
+                            "body": "<p></p><p>点击<a>在线开发/页面制作</a>里面的<strong>新增</strong>按钮</a></p><p>填入<strong>页面名称</strong>,<strong>页面标识</strong>,<strong>页面源码</strong></p><p>其中<strong>页面源码</strong>相关内容请到<a href='https://baidu.github.io/amis/form/mode' target='_blank'>amis官网</a>查看对应的组件源码拷贝过来</p><p>点击确定按钮保存</p><p><code>注: 页面名称和页面标识必须要唯一,其中页面标识其实是跟菜单路由一一对应的</code></p><img src='/img/guide/page-add.jpg'/>"
+                        },
+                        {
+                            "type": "divider"
+                        },
+                        {
+                            "type": "html",
+                            "html": "<h4>2. 发布到菜单</h4>"
+                        },
+                        {
+                            "type": "panel",
+                            "body": "<p>新创建的页面怎么才能在菜单里面显示用户可以查看呢？这里需要用到发布到菜单的功能</p><p>点击<a>在线开发/页面制作</a>里面的<strong>发布到菜单</strong>按钮</p><p>补充对应的表单内容,其中如果<strong>上级菜单</strong>不填则默认根菜单，如果有多级菜单，先这里创建后重新发布多一次然后选择上次发布的菜单,以下以创建二级菜单为例:</p><br/></br><p>先创建对应的顶级菜单</p><img src='/img/guide/push-menu-first.jpg'/><br/></br><p>再创建对应的子菜单</p><img src='/img/guide/push-menu-second.jpg'/><p>最终效果:</p><img src='/img/guide/push-menu-result.jpg'/>"
+                        },
+                        {
+                            "type": "alert",
+                            "level": "info",
+                            "body": "恭喜你已经完成一个页面的创建流程了！剩下的工作就是提供你的数据接口并修改对应的页面json里面对应的api相关接口保存就可以实时预览页面了，其中如果修改错误还有对应的历史版本可以回滚，请开始你的后台制作吧！"
+                        }
+                    ]
+                },
+                {
+                    "title": "接口数据格式",
+                    "tab": [
+                        {
+                            "type": "html",
+                            "html": "<h3>整体格式</h3>"
+                        },
+                        {
+                            "type": "html",
+                            "html": "<p>要求每个接口都返回 <code>status</code> 字段用来表示成功还是失败，如果失败了，通过 <code>msg</code> 字段来说明失败原因。当然如果成功 <code>msg</code> 也可以用来设置提示信息。</p>"
+                        },
+                        {
+                            "title": "",
+                            "type": "form",
+                            "autoFocus": false,
+                            "submitText": null,
+                            "actions": [],
+                            "controls": [
+                                {
+                                    "type": "json-editor",
+                                    "value": "{\"status\":0,\"msg\":\"\",\"data\":{}}"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "html",
+                            "html": "<p><code>status</code> 0 表示成功，非0 表示失败</p><p>如果接口不能按以上要求返回数据，可以使用<code>adaptor</code>调整格式后再返回给api，具体示例可以参考<a>在线开发/页面制作</a>的页面源码,</br>同样的提交的数据如果需要提交前做调整，可以使用<code>requestAdaptor</code>调整格式后再提交,具体示例可以参考<a>角色管理</a>的页面源码</p>"
+                        },
+                        {
+                            "type": "divider"
+                        },
+                        {
+                            "type": "html",
+                            "html": "<h4>成功示例</h4>"
+                        },
+                        {
+                            "title": "",
+                            "type": "form",
+                            "autoFocus": false,
+                            "submitText": null,
+                            "actions": [],
+                            "controls": [
+                                {
+                                    "type": "json-editor",
+                                    "value": "{\"status\":0,\"msg\":\"OK\",\"data\":{\"count\":8,\"rows\":[{\"id\":7,\"identify\":\"/tools/tpl_store\",\"name\":\"模板商城\",\"source\":\"示例源码\"},{\"id\":8,\"identify\":\"/tools/tpl_store\",\"name\":\"模板商城\",\"source\":\"示例源码\"}]}}"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "html",
+                            "html": "<p><code>data.count</code> 表示当前记录总条数</p><p><code>data.rows</code>表示具体的列数据</p>"
+                        },
+                        {
+                            "type": "divider"
+                        },
+                        {
+                            "type": "html",
+                            "html": "<h4>失败示例</h4>"
+                        },
+                        {
+                            "title": "",
+                            "type": "form",
+                            "autoFocus": false,
+                            "submitText": null,
+                            "actions": [],
+                            "controls": [
+                                {
+                                    "type": "json-editor",
+                                    "value": "{\"status\":-1,\"msg\":\"操作失败\",\"data\":{}}"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "title": "权限控制",
+                    "tab": [
+                        {
+                            "type": "html",
+                            "html": "<h3>控制按钮的显示</h3>"
+                        },
+                        {
+                            "type": "html",
+                            "html": "<p>如果要根据权限控制相关按钮的显示隐藏，需要在相关页面组件中使用<code>visibleOn</code>字段来显示，当条件为true时会显示相应的组件，代码如下:"
+                        },
+                        {
+                            "title": "",
+                            "type": "form",
+                            "autoFocus": false,
+                            "submitText": null,
+                            "actions": [],
+                            "controls": [
+                                {
+                                    "type": "json-editor",
+                                    "value": "{\"buttons\":[{\"actionType\":\"ajax\",\"api\":{\"adaptor\":\"{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};payload.status=0;payload.msg='ok'; }return payload;}\",\"headers\":{\"Authorization\":\"${_authorization}\"},\"method\":\"post\",\"url\":\"${_page_schema_api|raw}/api/v1/page_manager/$id\"},\"icon\":\"fa fa-clone\",\"reload\":\"page-manage-table\",\"tooltip\":\"克隆当前页\",\"type\":\"button\",\"visibleOn\":\"acl.can('/tools/page_manager::clone')\"}]}"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "html",
+                            "html": "其中/tools/page_manager::clone以::区服路由和动作标识，/tools/page_manager表示当前页面的路由，对应<code>菜单管理</code>的<b>访问路径</b>, clone对应<code>菜单管理</code>的<b>动作(按钮)中的动作编号</b><img src='/img/guide/permission-button-visible.jpg'/>"
+                        },
+                        {
+                            "type": "divider"
+                        },
+                        {
+                            "type": "html",
+                            "html": "<h3>接口的访问权限</h3>"
+                        },
+                        {
+                            "type": "html",
+                            "html": "<p>请求的数据外部接口是否有相关的功能权限允许访问，这里需要在header里面带上Authorization传递给第三方接口，后续第三方接口可以调用平台的接口拉取对应的权限列表自行判断是否满足访问权限，代码如下:"
+                        },
+                        {
+                            "title": "",
+                            "type": "form",
+                            "autoFocus": false,
+                            "submitText": null,
+                            "actions": [],
+                            "controls": [
+                                {
+                                    "type": "json-editor",
+                                    "value": "{\"buttons\":[{\"actionType\":\"ajax\",\"api\":{\"adaptor\":\"{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};payload.status=0;payload.msg='ok'; }return payload;}\",\"headers\":{\"Authorization\":\"${_authorization}\"},\"method\":\"post\",\"url\":\"${_page_schema_api|raw}/api/v1/page_manager/$id\"},\"icon\":\"fa fa-clone\",\"reload\":\"page-manage-table\",\"tooltip\":\"克隆当前页\",\"type\":\"button\",\"visibleOn\":\"acl.can('/tools/page_manager::clone')\"}]}"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "html",
+                            "html": "其中\\${_authorization}是系统登录后生成的jwt字符串全局变量，可以在页面中引用到，更多全局变量的说明可以查看<a>系统管理/系统配置中</a>的全局变量配置"
+                        }
+                    ]
+                }
+            ]
+        }
     }
 - name: "菜单管理"
   identify: "/system/menu"
@@ -1272,8 +1412,13 @@
                         "collapsable": true,
                         "controls": [
                             {
+                                "type": "alert",
+                                "level": "warning",
+                                "body": "系统默认注册的全局变量: </br><p><b>权限资格: </b>\\${_authorization}</p><p><b>当前路由:</b>\\${_page_name}</p><p><b>当前应用标识:</b>\\${_app_id}</p><p><b>系统接口地址:</b>\\${_page_schema_api}  (对应web/js/config.js的pageSchemaApi配置，可自行修改)</p>"
+                            },
+                            {
                                 "type": "html",
-                                "html": "以下变量的值可以在页面源码的schema用<code>\\${_global_env.你的key名称}.xxx</code>取到对应的值,如${_global_env.myKeyName}"
+                                "html": "以下变量的值可以在页面源码的schema用<code>\\${_global_env.你的key名称}</code>取到对应的值,如${_global_env.myKeyName}"
                             },
                             {
                                 "type": "combo",
@@ -1395,6 +1540,13 @@
                             ]
                         }
                     }
+                },
+                {
+                    "type": "link",
+                    "href": "https://baidu.github.io/amis/crud/table",
+                    "body": "更多amis官方例子",
+                    "htmlTarget": "_blank",
+                    "className": "v-middle"
                 },
                 {
                     "type": "columns-toggler",
@@ -1672,7 +1824,7 @@
                                   "&": "$$",
                                   "router":"${identify|raw}",
                                   "_page_schema_api":"${_page_schema_api|raw}",
-                                  "_authorization":"${_authorization"
+                                  "_authorization":"${_authorization}"
                                 },
                                 "body": {
                                     "type": "form",

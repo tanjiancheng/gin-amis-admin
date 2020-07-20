@@ -59,6 +59,12 @@ html, body {
     border-color: white !important;
     box-shadow: unset !important;
 }
+
 .goto-github a {
-    color: unset!important;
+    color: unset !important;
+}
+
+
+.editor-full .monaco-editor {
+    height: 750px !important;
 }

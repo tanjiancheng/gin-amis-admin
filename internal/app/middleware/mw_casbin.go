@@ -1,11 +1,11 @@
 package middleware
 
 import (
+	"github.com/casbin/casbin/v2"
+	"github.com/gin-gonic/gin"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/config"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/ginplus"
 	"github.com/tanjiancheng/gin-amis-admin/pkg/errors"
-	"github.com/casbin/casbin/v2"
-	"github.com/gin-gonic/gin"
 )
 
 // CasbinMiddleware casbin中间件

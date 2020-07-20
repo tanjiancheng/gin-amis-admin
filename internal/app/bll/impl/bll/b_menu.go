@@ -4,13 +4,13 @@ import (
 	"context"
 	"os"
 
+	"github.com/google/wire"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/bll"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/iutil"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/model"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/schema"
 	"github.com/tanjiancheng/gin-amis-admin/pkg/errors"
 	"github.com/tanjiancheng/gin-amis-admin/pkg/util"
-	"github.com/google/wire"
 )
 
 var _ bll.IMenu = (*Menu)(nil)
@@ -130,6 +130,11 @@ func (a *Menu) Get(ctx context.Context, id string, opts ...schema.MenuQueryOptio
 	item.Actions = actions
 
 	return item, nil
+}
+
+func (a *Menu) GetByRouter(ctx context.Context, router string) (*schema.Menu, error) {
+	item, err := a.MenuModel.GetByRouter(ctx, router)
+	return item, err
 }
 
 // QueryActions 查询动作数据

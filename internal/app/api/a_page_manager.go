@@ -3,11 +3,11 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/gin-gonic/gin"
+	"github.com/google/wire"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/bll"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/ginplus"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/schema"
-	"github.com/gin-gonic/gin"
-	"github.com/google/wire"
 	"strconv"
 	"time"
 )
@@ -18,6 +18,7 @@ var PageManagerSet = wire.NewSet(wire.Struct(new(PageManager), "*"))
 // PageManager 用户管理
 type PageManager struct {
 	PageManagerBll bll.IPageManager
+	MenuBll        bll.IMenu
 }
 
 // Query 查询数据
@@ -65,12 +66,39 @@ func (a *PageManager) GetByRoute(c *gin.Context) {
 	ginplus.ResCustomSuccess(c, sourceMap)
 }
 
+// GetByRouteWithDetail 根据路由查询详细数据
+func (a *PageManager) GetByRouteWithDetail(c *gin.Context) {
+	ctx := c.Request.Context()
+	var params schema.PageManagerQueryParam
+	if err := ginplus.ParseQuery(c, &params); err != nil {
+		ginplus.ResCustomError(c, err)
+		return
+	}
+	item, err := a.PageManagerBll.GetByRoute(ctx, params.Route)
+	if err != nil {
+		ginplus.ResCustomError(c, err)
+		return
+	}
+	source := item.Source
+	sourceMap := make(map[string]interface{})
+	err = json.Unmarshal([]byte(source), &sourceMap)
+	if err != nil {
+		ginplus.ResCustomError(c, err)
+		return
+	}
+	ginplus.ResCustomSuccess(c, item)
+}
+
 // Get 查询指定数据
 func (a *PageManager) Get(c *gin.Context) {
 	ctx := c.Request.Context()
 	id := c.Param("id")
 	if id == "route" {
 		a.GetByRoute(c)
+		return
+	}
+	if id == "route_with_detail" {
+		a.GetByRouteWithDetail(c)
 		return
 	}
 	item, err := a.PageManagerBll.Get(ctx, c.Param("id"))
@@ -148,7 +176,26 @@ func (a *PageManager) Update(c *gin.Context) {
 // Delete 删除数据
 func (a *PageManager) Delete(c *gin.Context) {
 	ctx := c.Request.Context()
-	err := a.PageManagerBll.Delete(ctx, c.Param("id"))
+
+	item, err := a.PageManagerBll.Get(ctx, c.Param("id"))
+	if err != nil {
+		ginplus.ResError(c, err)
+		return
+	}
+	router := item.Identify
+	menuInfo, err := a.MenuBll.GetByRouter(ctx, router)
+	if err != nil {
+		ginplus.ResError(c, err)
+		return
+	}
+
+	//如果有菜单数据先删除菜单
+	err = a.MenuBll.Delete(ctx, menuInfo.ID)
+	if err != nil {
+		ginplus.ResError(c, err)
+		return
+	}
+	err = a.PageManagerBll.Delete(ctx, c.Param("id"))
 	if err != nil {
 		ginplus.ResError(c, err)
 		return

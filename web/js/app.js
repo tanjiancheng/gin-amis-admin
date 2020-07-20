@@ -59,6 +59,7 @@
     function initPlatformInfo($) {
         let platformLogo = setting.platform_logo || 'fa fa-fort-awesome';
         let platformName = setting.platform_name || '后台系统';
+        let indexUrl = setting.dashboard_route || '/dashboard';
         if (platformLogo.length > 0) {
             $(".platform-logo").attr("class", platformLogo);
         }
@@ -66,6 +67,7 @@
             $(".platform-name").text(platformName);
             $("title").text(platformName);
         }
+        $("#page-index").attr("href", "/#" + indexUrl);
     }
 
     // 初始化边栏展开收起功能。
@@ -84,6 +86,18 @@
                 $i.removeClass('fa-dedent').addClass('fa-indent');
             }
         });
+    }
+
+    //监听地址栏变化
+    function initHashChange() {
+        window.onhashchange = function (event) {
+            let newPath = event.newURL;
+            if (newPath === undefined) {
+                return;
+            }
+            let page = newPath.substring(newPath.indexOf("#") + 1);
+            renderPage(page)
+        }
     }
 
     // 初始化导航展开效果。
@@ -200,6 +214,15 @@
 
     //点击菜单加载page数据
     function initMenuClick($) {
+        $(document.body).on('click', '.nav-menu', function () {
+            let page = $(this).attr("href").substring(2) || 'main';
+            window.location.hash = page;
+            renderPage(page);
+        })
+    }
+
+    function renderPage(page) {
+        let amis = amisRequire("amis/embed");
         let globalEnv = {};
         if (setting.global_env !== undefined) {
             for (let i in setting.global_env) {
@@ -207,55 +230,51 @@
                 globalEnv[globalEnvItem.key] = globalEnvItem.value;
             }
         }
-        $(document.body).on('click', '.nav-menu', function () {
-            let amis = amisRequire("amis/embed");
-            let page = $(this).attr("href").substring(2) || 'main';
-            window.location.hash = page;
-            amis.embed("#main", {
-                type: "service",
-                schemaApi: {
-                    method: "get",
-                    url: pageSchemaApi + "/api/v1/page_manager/route?route=" + page + "&_monitor=$_page_name",
-                    headers: {
-                        Authorization: getAuthorization()
-                    }
+        amis.embed("#main", {
+            type: "service",
+            schemaApi: {
+                method: "get",
+                url: pageSchemaApi + "/api/v1/pub/page_manager/route?route=" + page + "&_monitor=$_page_name",
+                headers: {
+                    Authorization: getAuthorization()
                 },
-                initFetchSchema: true
-            }, {
-                "data": {
-                    "_authorization": getAuthorization(),
-                    "_page_name": page,
-                    "_app_id": getAppId(),
-                    "_page_schema_api": pageSchemaApi,
-                    "_global_env": globalEnv,
-                    "acl": {
-                        "can": (...permissions) => {
-                            for (let i in permissionActions) {
-                                for (let j in permissions) {
-                                    if (permissions[j] === permissionActions[i]) {
-                                        return true;
-                                    }
+                adaptor: "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} return payload;}"
+            },
+            initFetchSchema: true
+        }, {
+            "data": {
+                "_authorization": getAuthorization(),
+                "_page_name": page,
+                "_app_id": getAppId(),
+                "_page_schema_api": pageSchemaApi,
+                "_global_env": globalEnv,
+                "acl": {
+                    "can": (...permissions) => {
+                        for (let i in permissionActions) {
+                            for (let j in permissions) {
+                                if (permissions[j] === permissionActions[i]) {
+                                    return true;
                                 }
                             }
-                            return false;
                         }
+                        return false;
                     }
                 }
-            }, {
-                updateLocation: (location, replace) => {
-                    console.log("updateLocation", location, replace)
-                },
-                jumpTo: to => {
-                    //console.log("jumpTo", to)
-                    window.location.replace(to);
-                }
-            });
+            }
+        }, {
+            updateLocation: (location, replace) => {
+                console.log("updateLocation", location, replace)
+            },
+            jumpTo: to => {
+                //console.log("jumpTo", to)
+                window.location.replace(to);
+            }
+        });
 
-            const $topItem = $(this).closest('.a-AsideNav-list').find('.a-AsideNav-item');
-            $topItem.removeClass('is-active');
+        const $topItem = $(this).closest('.a-AsideNav-list').find('.a-AsideNav-item');
+        $topItem.removeClass('is-active');
 
-            $(this).closest('.a-AsideNav-item').addClass('is-active');
-        })
+        $(this).closest('.a-AsideNav-item').addClass('is-active');
     }
 
     //判断用户是否登录
@@ -371,16 +390,20 @@
             $.ajax({
                 async: false,    //表示请求是否异步处理
                 type: "get",    //请求类型
-                url: pageSchemaApi + "/api/v1/page_manager/route?route=" + page,
+                url: pageSchemaApi + "/api/v1/pub/page_manager/route_with_detail?route=" + page,
                 beforeSend: function (request) {
                     request.setRequestHeader("authorization", getAuthorization());
                 },
+                cache: true,
                 dataType: "json",//返回的数据类型
                 success: function (response) {
                     if (response.status == undefined || response.status != 0) {
                         return;
                     }
-                    let source = response.data;
+                    let source = response.data.source;
+                    let id = response.data.id;
+                    let name = response.data.name;
+                    let identify = response.data.identify;
                     let amis = amisRequire("amis/embed");
                     amis.embed("#view-page-source", {
                         "type": "page",
@@ -404,19 +427,48 @@
                                     "body": {
                                         "title": "",
                                         "type": "form",
+                                        "api": {
+                                            "url": pageSchemaApi + "/api/v1/page_manager/" + id,
+                                            "method": "put",
+                                            "headers": {
+                                                "Authorization": getAuthorization()
+                                            },
+                                            "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};payload.status=0;payload.msg='ok'; }return payload;}"
+                                        },
+                                        "reload": "window",
                                         "controls": [
                                             {
+                                                "type": "hidden",
+                                                "name": "name",
+                                                "label": "页面名称",
+                                                "required": true,
+                                                "value": name
+                                            },
+                                            {
+                                                "type": "hidden",
+                                                "name": "identify",
+                                                "label": "页面标识",
+                                                "description": "对应菜单的路由，必须唯一",
+                                                "required": true,
+                                                "value": identify
+                                            },
+                                            {
                                                 "type": "json-editor",
-                                                "name": "json",
+                                                "name": "source",
                                                 "label": false,
                                                 "size": "xxl",
-                                                "className": "h-full",
+                                                "className": "h-full editor-full",
                                                 "value": source
                                             }
                                         ]
                                     },
-                                    "submitText": null,
-                                    "actions": []
+                                    "actions": [
+                                        {
+                                            "type": "submit",
+                                            "level": "primary",
+                                            "label": "编辑并保存"
+                                        }
+                                    ]
                                 }
                             },
                             {
@@ -454,15 +506,17 @@
 
     // 也可以通过其他方式加载 jQuery
     require(["jquery"], function ($) {
+        checkLogin($);
         initSetting($);
         initPlatformInfo($);
+        initHashChange();
         initMenuAndPermissionActions($);
         initAsideToggle($);
         initNavClick($);
         initMenuClick($);
         initNavMenu($);
         initSourceClick($);
-        checkLogin($);
+
     });
 
 

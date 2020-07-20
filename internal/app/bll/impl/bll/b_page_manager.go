@@ -3,6 +3,7 @@ package bll
 import (
 	"context"
 	"encoding/json"
+	"github.com/tanjiancheng/gin-amis-admin/internal/app/config"
 	"github.com/tanjiancheng/gin-amis-admin/pkg/errors"
 	"os"
 	"strconv"
@@ -132,9 +133,11 @@ func (a *PageManager) Update(ctx context.Context, id string, item schema.PageMan
 		"/tools/page_manager",
 	}
 
-	for _, item := range cantNotUpdateIdentify {
-		if item == oldItem.Identify {
-			return errors.ErrNotAllowUpdate
+	if config.C.RunMode != "debug" {
+		for _, item := range cantNotUpdateIdentify {
+			if item == oldItem.Identify {
+				return errors.ErrNotAllowUpdate
+			}
 		}
 	}
 

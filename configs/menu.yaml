@@ -68,16 +68,6 @@
           resources:
             - method: GET
               path: "/api/v1/roles"
-        - code: disable
-          name: 禁用
-          resources:
-            - method: PATCH
-              path: "/api/v1/roles/:id/disable"
-        - code: enable
-          name: 启用
-          resources:
-            - method: PATCH
-              path: "/api/v1/roles/:id/enable"
     - name: 用户管理
       icon: fa fa-user
       router: "/system/user"
@@ -109,16 +99,6 @@
           resources:
             - method: GET
               path: "/api/v1/users"
-        - code: disable
-          name: 禁用
-          resources:
-            - method: PATCH
-              path: "/api/v1/users/:id/disable"
-        - code: enable
-          name: 启用
-          resources:
-            - method: PATCH
-              path: "/api/v1/users/:id/enable"
     - name: 系统配置
       icon: fa fa-cog
       router: "/system/setting"

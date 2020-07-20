@@ -143,6 +143,7 @@ func BuildInjector() (*Injector, func(), error) {
 	}
 	apiPageManager := &api.PageManager{
 		PageManagerBll: bllPage,
+		MenuBll:        bllMenu,
 	}
 	apiPageVersionHistory := &api.PageVersionHistory{
 		PageVersionHistoryBll: bllPageVersionHistory,
@@ -151,9 +152,9 @@ func BuildInjector() (*Injector, func(), error) {
 		SettingBll: bllSetting,
 	}
 	apiApp := &api.App{
-		AppBll:  bllApp,
-		MenuBll: bllMenu,
-		PageBll: bllPage,
+		AppBll:     bllApp,
+		MenuBll:    bllMenu,
+		PageBll:    bllPage,
 		SettingBll: bllSetting,
 	}
 	routerRouter := &router.Router{

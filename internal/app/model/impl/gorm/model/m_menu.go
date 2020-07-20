@@ -2,12 +2,12 @@ package model
 
 import (
 	"context"
+	"github.com/google/wire"
+	"github.com/jinzhu/gorm"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/model"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/model/impl/gorm/entity"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/schema"
 	"github.com/tanjiancheng/gin-amis-admin/pkg/errors"
-	"github.com/google/wire"
-	"github.com/jinzhu/gorm"
 )
 
 var _ model.IMenu = (*Menu)(nil)
@@ -86,6 +86,18 @@ func (a *Menu) Get(ctx context.Context, id string, opts ...schema.MenuQueryOptio
 	return item.ToSchemaMenu(), nil
 }
 
+func (a *Menu) GetByRouter(ctx context.Context, router string) (*schema.Menu, error) {
+	var item entity.Menu
+	ok, err := FindOne(ctx, entity.GetMenuDB(ctx, a.DB).Where("router=?", router), &item)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	} else if !ok {
+		return nil, nil
+	}
+
+	return item.ToSchemaMenu(), nil
+}
+
 // Create 创建数据
 func (a *Menu) Create(ctx context.Context, item schema.Menu) error {
 	eitem := entity.SchemaMenu(item).ToMenu()
@@ -109,6 +121,12 @@ func (a *Menu) UpdateParentPath(ctx context.Context, id, parentPath string) erro
 // Delete 删除数据
 func (a *Menu) Delete(ctx context.Context, id string) error {
 	result := entity.GetMenuDB(ctx, a.DB).Where("id=?", id).Delete(entity.Menu{})
+	return errors.WithStack(result.Error)
+}
+
+// Delete 删除数据
+func (a *Menu) DeleteByRouter(ctx context.Context, router string) error {
+	result := entity.GetMenuDB(ctx, a.DB).Where("router=?", router).Delete(entity.Menu{})
 	return errors.WithStack(result.Error)
 }
 
