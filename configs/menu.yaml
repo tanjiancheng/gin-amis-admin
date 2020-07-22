@@ -103,6 +103,36 @@
       icon: fa fa-cog
       router: "/system/setting"
       sequence: 6
+    - name: 平台管理
+      icon: fa fa-university
+      router: "/system/platforms"
+      sequence: 5
+      actions:
+        - code: add
+          name: 新增
+          resources:
+            - method: GET
+              path: "/api/v1/platforms/:id"
+        - code: query
+          name: 查询
+          resources:
+            - method: GET
+              path: "/api/v1/platforms"
+        - code: enter
+          name: 登入
+          resources:
+            - method: GET
+              path: "/api/v1/platforms"
+        - code: enable
+          name: 启用
+          resources:
+            - method: PATCH
+              path: "/api/v1/platforms/:id/enable"
+        - code: disable
+          name: 禁用
+          resources:
+            - method: PATCH
+              path: "/api/v1/platforms/:id/disable"
 - name: 在线开发
   icon: fa fa-pencil
   sequence: 6

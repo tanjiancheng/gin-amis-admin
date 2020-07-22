@@ -1447,6 +1447,184 @@
             }
         ]
     }
+- name: "平台管理"
+  identify: "/system/platforms"
+  source: |
+    {
+        "$schema": "http://amis.baidu.com/v2/schemas/page.json#",
+        "type": "page",
+        "title": "平台管理",
+        "body": [{
+            "type": "alert",
+            "body": "平台管理是允许管理员创建不同的应用平台，各自的平台数据以app_id互相隔离，可以根据业务快速的创建不用的业务后台",
+            "level": "info"
+        },{
+            "name": "platform-manage-table",
+            "type": "crud",
+            "draggable": false,
+            "pageField": "current",
+            "perPageField": "pageSize",
+            "syncLocation": false,
+            "api": {
+                "url": "${_page_schema_api|raw}/api/v1/platforms",
+                "method": "get",
+                "headers": {
+                    "Authorization": "${_authorization}"
+                },
+                "data": {
+                    "&": "$$"
+                },
+                "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};var data=payload.list;for(var i in data){var roleArr=[];var userRoles=[];var roles=data[i].roles;for(var j in roles){roleArr.push(roles[j].name);userRoles.push(roles[j].id)}data[i].roles=roleArr.join(\"|\");data[i].user_roles=userRoles};payload.data.rows=data;payload.data.count=payload.pagination.total;payload.status=0;payload.msg='ok';}return payload;}"
+            },
+            "keepItemSelectionOnPageChange": true,
+            "filter": {
+                "title": "条件搜索",
+                "submitText": "",
+                "visibleOn": "acl.can('/system/platforms::query')",
+                "controls": [{
+                    "type": "text",
+                    "name": "queryValue",
+                    "placeholder": "搜索平台",
+                    "addOn": {
+                        "label": "搜索",
+                        "type": "submit"
+                    }
+                }]
+            },
+            "filterTogglable": true,
+            "headerToolbar": [{
+                    "type": "button",
+                    "actionType": "dialog",
+                    "label": "新增平台",
+                    "icon": "fa fa-plus pull-left",
+                    "primary": true,
+                    "visibleOn": "acl.can('/system/platforms::add')",
+                    "dialog": {
+                        "title": "新增平台",
+                        "body": {
+                            "type": "form",
+                            "name": "sample-edit-form",
+                            "api": {
+                                "url": "${_page_schema_api|raw}/api/v1/platforms/check?app_id=${app_id}",
+                                "method": "get",
+                                "headers": {
+                                    "Authorization": "${_authorization}"
+                                },
+                                "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};payload.status=0;payload.msg='ok';}return payload;}"
+                            },
+                            "redirect": "/page/wizard.html?app_id=${app_id}",
+                            "controls": [{
+                                "name": "app_id",
+                                "label": "平台标识",
+                                "sortable": true,
+                                "type": "text",
+                                "required": true,
+                                "placeholder": "[A-Za-z0-9]的字母和数字组合",
+                                "validations": "isAlphanumeric,maximum:36"
+                            }]
+                        }
+                    }
+                },
+                {
+                    "type": "columns-toggler",
+                    "align": "right"
+                },
+                {
+                    "type": "pagination",
+                    "align": "right"
+                },
+                {
+                    "type": "filter-toggler",
+                    "align": "right"
+                }
+            ],
+            "footerToolbar": [
+                "statistics",
+                "switch-per-page",
+                "pagination"
+            ],
+            "columns": [{
+                    "name": "app_id",
+                    "label": "平台标识",
+                    "sortable": true,
+                    "type": "text",
+                    "required": true
+                },
+                {
+                    "name": "name",
+                    "label": "平台名称",
+                    "sortable": true,
+                    "type": "text",
+                    "required": true
+                },
+                {
+                    "type": "mapping",
+                    "name": "status",
+                    "label": "平台状态",
+                    "inline": true,
+                    "map": {
+                        "1": "<span class='label label-success'>正常</span>  ${is_current|raw}",
+                        "-1": "<span class='label label-danger'>禁用</span>  ${is_current|raw}"
+                    }
+                },
+                {
+                    "name": "create_time",
+                    "label": "创建时间",
+                    "sortable": true,
+                    "type": "date",
+                    "format": "YYYY-MM-DD hh:mm:ss",
+                    "toggled": true
+                },
+                {
+                    "type": "operation",
+                    "label": "操作",
+                    "width": 200,
+                    "buttons": [{
+                            "type": "button",
+                            "icon": "fa fa-play text-success",
+                            "actionType": "ajax",
+                            "tooltip": "启用",
+                            "confirmText": "您确认要启用该平台吗?",
+                            "visibleOn": "acl.can('/system/platforms::enable')",
+                            "api": {
+                                "url": "${_page_schema_api|raw}/api/v1/platforms/$id/enable",
+                                "method": "patch",
+                                "headers": {
+                                    "Authorization": "${_authorization}"
+                                },
+                                "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};payload.status=0;payload.msg='ok';}return payload;}"
+                            }
+                        },
+                        {
+                            "type": "button",
+                            "icon": "fa fa-stop   text-danger",
+                            "actionType": "ajax",
+                            "tooltip": "停用",
+                            "confirmText": "停用后将不能允许登录到该平台，您确认要停用该平台吗?",
+                            "visibleOn": "acl.can('/system/platforms::disable')",
+                            "api": {
+                                "url": "${_page_schema_api|raw}/api/v1/platforms/$id/disable",
+                                "method": "patch",
+                                "headers": {
+                                    "Authorization": "${_authorization}"
+                                },
+                                "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};payload.status=0;payload.msg='ok';}return payload;}"
+                            }
+                        },
+                        {
+                            "type": "button",
+                            "icon": "fa fa-sign-in",
+                            "actionType": "link",
+                            "tooltip": "登录该平台",
+                            "link": "/login.html?app_id=${app_id}",
+                            "visibleOn": "acl.can('/system/platforms::enter')"
+                        }
+                    ],
+                    "toggled": true
+                }
+            ]
+        }]
+    }
 - name: "页面制作"
   identify: "/tools/page_manager"
   source: |

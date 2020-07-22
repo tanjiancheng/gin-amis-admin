@@ -2,12 +2,12 @@ package api
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
+	"github.com/google/wire"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/bll"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/config"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/ginplus"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/schema"
-	"github.com/gin-gonic/gin"
-	"github.com/google/wire"
 	"time"
 )
 
@@ -15,10 +15,11 @@ var AppSet = wire.NewSet(wire.Struct(new(App), "*"))
 
 // 应用相关接口
 type App struct {
-	AppBll     bll.IApp
-	MenuBll    bll.IMenu
-	PageBll    bll.IPageManager
-	SettingBll bll.ISetting
+	AppBll       bll.IApp
+	MenuBll      bll.IMenu
+	PageBll      bll.IPageManager
+	SettingBll   bll.ISetting
+	GPlatformBll bll.IGPlatform
 }
 
 //初始化应用相关资源
@@ -48,6 +49,18 @@ func (a *App) Init(c *gin.Context) {
 		return
 	}
 	err = a.PageBll.InitData(c, config.C.Page.Data)
+	if err != nil {
+		ginplus.ResCustomError(c, err)
+		return
+	}
+
+	//插入到全局平台表
+	err = a.GPlatformBll.Create(c, schema.GPlatform{
+		AppID:      appId,
+		Name:       params.PlatformName,
+		Status:     1,
+		CreateTime: time.Now().Unix(),
+	})
 	if err != nil {
 		ginplus.ResCustomError(c, err)
 		return

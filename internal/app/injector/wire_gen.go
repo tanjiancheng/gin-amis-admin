@@ -80,6 +80,9 @@ func BuildInjector() (*Injector, func(), error) {
 	appModel := &model.App{
 		DB: db,
 	}
+	gPlatformModel := &model.GPlatform{
+		DB: db,
+	}
 	login := &bll.Login{
 		Auth:            auther,
 		UserModel:       user,
@@ -88,9 +91,6 @@ func BuildInjector() (*Injector, func(), error) {
 		RoleMenuModel:   roleMenu,
 		MenuModel:       menu,
 		MenuActionModel: menuAction,
-	}
-	apiLogin := &api.Login{
-		LoginBll: login,
 	}
 	trans := &model.Trans{
 		DB: db,
@@ -117,6 +117,13 @@ func BuildInjector() (*Injector, func(), error) {
 	}
 	bllApp := &bll.App{
 		AppModel: appModel,
+	}
+	bllGPlatformBll := &bll.GPlatform{
+		GPlatformModel: gPlatformModel,
+	}
+	apiLogin := &api.Login{
+		LoginBll:     login,
+		GPlatformBll: bllGPlatformBll,
 	}
 	apiMenu := &api.Menu{
 		MenuBll: bllMenu,
@@ -150,12 +157,17 @@ func BuildInjector() (*Injector, func(), error) {
 	}
 	apiSetting := &api.Setting{
 		SettingBll: bllSetting,
+		GPlatformBll: bllGPlatformBll,
 	}
 	apiApp := &api.App{
-		AppBll:     bllApp,
-		MenuBll:    bllMenu,
-		PageBll:    bllPage,
-		SettingBll: bllSetting,
+		AppBll:       bllApp,
+		MenuBll:      bllMenu,
+		PageBll:      bllPage,
+		SettingBll:   bllSetting,
+		GPlatformBll: bllGPlatformBll,
+	}
+	apiGPlatform := &api.GPlatform{
+		GPlatformBll: bllGPlatformBll,
 	}
 	routerRouter := &router.Router{
 		Auth:                  auther,
@@ -169,6 +181,7 @@ func BuildInjector() (*Injector, func(), error) {
 		PageVersionHistoryAPI: apiPageVersionHistory,
 		SettingAPI:            apiSetting,
 		AppAPI:                apiApp,
+		GPlatFormAPI:          apiGPlatform,
 	}
 	engine := InitGinEngine(routerRouter)
 	injector := &Injector{
@@ -177,6 +190,7 @@ func BuildInjector() (*Injector, func(), error) {
 		CasbinEnforcer: syncedEnforcer,
 		MenuBll:        bllMenu,
 		PageBll:        bllPage,
+		GPlatformBll:   bllGPlatformBll,
 	}
 	return injector, func() {
 		cleanup3()

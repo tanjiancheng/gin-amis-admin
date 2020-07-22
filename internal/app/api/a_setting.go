@@ -2,11 +2,12 @@ package api
 
 import (
 	"encoding/json"
+	"github.com/gin-gonic/gin"
+	"github.com/google/wire"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/bll"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/ginplus"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/schema"
-	"github.com/gin-gonic/gin"
-	"github.com/google/wire"
+	"strconv"
 	"time"
 )
 
@@ -15,7 +16,8 @@ var SettingSet = wire.NewSet(wire.Struct(new(Setting), "*"))
 
 // Setting 示例程序
 type Setting struct {
-	SettingBll bll.ISetting
+	SettingBll   bll.ISetting
+	GPlatformBll bll.IGPlatform
 }
 
 // Query 查询数据
@@ -103,6 +105,21 @@ func (a *Setting) Create(c *gin.Context) {
 			ginplus.ResCustomError(c, err)
 			return
 		}
+	}
+
+	//更新对应的全局表平台数据
+	currentAppId := ginplus.GetAppId(c)
+	platformItem, err := a.GPlatformBll.GetByAppId(ctx, currentAppId)
+	if err != nil {
+		ginplus.ResCustomError(c, err)
+		return
+	}
+	platformItemId := platformItem.ID
+	platformItemIdStr := strconv.Itoa(platformItemId)
+	err = a.GPlatformBll.Update(ctx, platformItemIdStr, schema.GPlatform{})
+	if err != nil {
+		ginplus.ResCustomError(c, err)
+		return
 	}
 
 	ginplus.ResCustomSuccess(c, nil)

@@ -1,11 +1,11 @@
 package router
 
 import (
-	"github.com/tanjiancheng/gin-amis-admin/internal/app/api"
-	"github.com/tanjiancheng/gin-amis-admin/pkg/auth"
 	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
+	"github.com/tanjiancheng/gin-amis-admin/internal/app/api"
+	"github.com/tanjiancheng/gin-amis-admin/pkg/auth"
 )
 
 var _ IRouter = (*Router)(nil)
@@ -32,6 +32,7 @@ type Router struct {
 	PageVersionHistoryAPI *api.PageVersionHistory
 	SettingAPI            *api.Setting
 	AppAPI                *api.App
+	GPlatFormAPI          *api.GPlatform
 }
 
 // Register 注册路由

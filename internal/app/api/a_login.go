@@ -3,14 +3,14 @@ package api
 import (
 	"encoding/json"
 	"github.com/LyricTian/captcha"
+	"github.com/gin-gonic/gin"
+	"github.com/google/wire"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/bll"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/config"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/ginplus"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/schema"
 	"github.com/tanjiancheng/gin-amis-admin/pkg/errors"
 	"github.com/tanjiancheng/gin-amis-admin/pkg/logger"
-	"github.com/gin-gonic/gin"
-	"github.com/google/wire"
 )
 
 // LoginSet 注入Login
@@ -18,7 +18,8 @@ var LoginSet = wire.NewSet(wire.Struct(new(Login), "*"))
 
 // Login 登录管理
 type Login struct {
-	LoginBll bll.ILogin
+	LoginBll     bll.ILogin
+	GPlatformBll bll.IGPlatform
 }
 
 // GetCaptcha 获取验证码信息
@@ -69,6 +70,19 @@ func (a *Login) Login(c *gin.Context) {
 		return
 	}
 
+	appID := ginplus.GetScopeAppId(c)
+	// 验证平台是否允许登录
+	platformItem, err := a.GPlatformBll.GetByAppId(ctx, appID)
+	if err != nil {
+		ginplus.ResError(c, err)
+		return
+	}
+
+	if platformItem.Status == -1 {
+		ginplus.ResError(c, &errors.ResponseError{Message: "该平台已停用，不允许登录！请联系管理员"})
+		return
+	}
+
 	user, err := a.LoginBll.Verify(ctx, item.UserName, item.Password)
 	if err != nil {
 		ginplus.ResError(c, err)
@@ -80,7 +94,7 @@ func (a *Login) Login(c *gin.Context) {
 	ginplus.SetUserID(c, userID)
 
 	ctx = logger.NewUserIDContext(ctx, userID)
-	appID := ginplus.GetScopeAppId(c)
+
 	var subjectInfo schema.SubjectInfo
 	subjectInfo.AppID = appID
 	subjectInfo.UserID = userID
@@ -117,7 +131,15 @@ func (a *Login) Logout(c *gin.Context) {
 // RefreshToken 刷新令牌
 func (a *Login) RefreshToken(c *gin.Context) {
 	ctx := c.Request.Context()
-	tokenInfo, err := a.LoginBll.GenerateToken(ctx, ginplus.GetUserID(c))
+	var subjectInfo schema.SubjectInfo
+	subjectInfo.AppID = ginplus.GetScopeAppId(c)
+	subjectInfo.UserID = ginplus.GetUserID(c)
+	subjectJsonStr, err := json.Marshal(subjectInfo)
+	if err != nil {
+		ginplus.ResError(c, err)
+		return
+	}
+	tokenInfo, err := a.LoginBll.GenerateToken(ctx, string(subjectJsonStr))
 	if err != nil {
 		ginplus.ResError(c, err)
 		return

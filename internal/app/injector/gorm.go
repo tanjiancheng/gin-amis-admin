@@ -3,12 +3,15 @@ package injector
 import (
 	"context"
 	"errors"
+	"github.com/tanjiancheng/gin-amis-admin/internal/app/ginplus"
+	"github.com/tanjiancheng/gin-amis-admin/internal/app/schema"
 	"os"
 	"path/filepath"
+	"time"
 
+	"github.com/jinzhu/gorm"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/config"
 	igorm "github.com/tanjiancheng/gin-amis-admin/internal/app/model/impl/gorm"
-	"github.com/jinzhu/gorm"
 )
 
 // InitGormDB 初始化gorm存储
@@ -44,6 +47,17 @@ func InitGormData(ctx context.Context, injector *Injector) error {
 		if err != nil {
 			return err
 		}
+	}
+
+	//初始化平台数据
+	err := injector.GPlatformBll.Create(ctx, schema.GPlatform{
+		AppID:      ginplus.GetDefaultAppId(),
+		Name:       ginplus.GetDefaultAppName(),
+		Status:     1,
+		CreateTime: time.Now().Unix(),
+	})
+	if err != nil {
+		return err
 	}
 	return nil
 }

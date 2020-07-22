@@ -10,6 +10,26 @@
         setting = getSetting();
     }
 
+    //刷新登录token
+    function refreshToken($) {
+        $.ajax({
+            async: false,    //表示请求是否异步处理
+            type: "post",    //请求类型
+            url: pageSchemaApi + "/api/v1/pub/refresh-token",//请求的 URL地址
+            beforeSend: function (request) {
+                request.setRequestHeader("X-App-Id", getAppId());
+                request.setRequestHeader("authorization", getAuthorization());
+            },
+            dataType: "json",//返回的数据类型
+            success: function (response) {
+                if (response.access_token != undefined) {
+                    setAuthorization(response);
+                }
+            }
+        });
+    }
+
+    //获取当前用户权限列表
     function initMenuAndPermissionActions($) {
         $.ajax({
             async: false,
@@ -69,6 +89,7 @@
         }
         $("#page-index").attr("href", "/#" + indexUrl);
     }
+
 
     // 初始化边栏展开收起功能。
     function initAsideToggle($) {
@@ -507,6 +528,7 @@
     // 也可以通过其他方式加载 jQuery
     require(["jquery"], function ($) {
         checkLogin($);
+        refreshToken($);
         initSetting($);
         initPlatformInfo($);
         initHashChange();

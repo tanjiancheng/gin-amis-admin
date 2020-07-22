@@ -3,6 +3,7 @@ package middleware
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
+	"github.com/tanjiancheng/gin-amis-admin/internal/app/config"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/ginplus"
 	"strings"
 )
@@ -25,8 +26,12 @@ func AppIdMiddleware(skippers ...SkipperFunc) gin.HandlerFunc {
 				return defaultName
 			}
 			path := strings.Split(defaultName, "_")
-			oldPath := path[0] + "_" + path[1]
-			newPath := path[0] + "_" + appID
+			prefix := path[0]
+			if prefix+"_" == config.C.Gorm.GlobalTablePrefix { //全局表不需要切换
+				return defaultName
+			}
+			oldPath := prefix + "_" + path[1]
+			newPath := prefix + "_" + appID
 			return strings.Replace(defaultName, oldPath, newPath, -1)
 		}
 		c.Next()

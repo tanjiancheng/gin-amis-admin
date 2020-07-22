@@ -1,10 +1,23 @@
 (function () {
     let amis = amisRequire("amis/embed");
+    let oldAppId = store.session("app_id");
     let appId = getAppId();
+    setAppId(appId);
     amis.embed("#wizard", {
         "$schema": "https://houtai.baidu.com/v2/schemas/page.json#",
-        "title": "应用初始化向导",
+        "title": [
+            "应用初始化向导",
+            {
+                "type": "button",
+                "label": "取消并返回",
+                "className": "float-right",
+                "level": "danger",
+                "actionType": "link",
+                "link": "/?app_id="+oldAppId,
+            }
+        ],
         "body": [
+
             {
                 "type": "wizard",
                 "api": {

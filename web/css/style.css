@@ -64,7 +64,10 @@ html, body {
     color: unset !important;
 }
 
-
-.editor-full .monaco-editor {
-    height: 750px !important;
+.float-right {
+    float:right;
 }
+
+/*.editor-full .monaco-editor {
+    height: 750px !important;
+}*/

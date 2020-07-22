@@ -6,10 +6,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/jinzhu/gorm"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/config"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/model/impl/gorm/entity"
 	"github.com/tanjiancheng/gin-amis-admin/pkg/logger"
-	"github.com/jinzhu/gorm"
 
 	// gorm存储注入
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -74,7 +74,7 @@ func AutoMigrate(db *gorm.DB) error {
 		new(entity.PageManager),
 		new(entity.PageVersionHistory),
 		new(entity.Setting),
+		new(entity.GPlatform),
 	).Error
-
 	return err
 }

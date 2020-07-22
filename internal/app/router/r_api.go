@@ -132,5 +132,16 @@ func (a *Router) RegisterAPI(app *gin.Engine) {
 			gApp.POST("", a.AppAPI.Init)
 			gApp.GET(":id", a.AppAPI.Query)
 		}
+
+		gPlatform := v1.Group("platforms")
+		{
+			gPlatform.GET("", a.GPlatFormAPI.Query)
+			gPlatform.GET(":id", a.GPlatFormAPI.Get)
+			gPlatform.POST("", a.GPlatFormAPI.Create)
+			gPlatform.PUT(":id", a.GPlatFormAPI.Update)
+			gPlatform.DELETE(":id", a.GPlatFormAPI.Delete)
+			gPlatform.PATCH(":id/enable", a.GPlatFormAPI.Enable)
+			gPlatform.PATCH(":id/disable", a.GPlatFormAPI.Disable)
+		}
 	}
 }

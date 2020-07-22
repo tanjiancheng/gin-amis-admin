@@ -6,12 +6,12 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/schema"
 	"github.com/tanjiancheng/gin-amis-admin/pkg/errors"
 	"github.com/tanjiancheng/gin-amis-admin/pkg/logger"
 	"github.com/tanjiancheng/gin-amis-admin/pkg/util"
-	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
 )
 
 // 定义上下文中的键
@@ -39,6 +39,10 @@ func GetScopeAppId(c *gin.Context) string {
 
 func GetDefaultAppId() string {
 	return "default"
+}
+
+func GetDefaultAppName() string {
+	return "后台系统"
 }
 
 var tablePrefix string

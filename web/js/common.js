@@ -37,7 +37,10 @@ function getAuthorization() {
 }
 
 function getAppId() {
-    let appId = store.session("app_id");
+    let appId = getUrlParam("app_id");
+    if (appId == undefined || appId.length <= 0 || appId === null) {
+        appId = store.session("app_id");
+    }
     if (appId == undefined || appId.length <= 0 || appId === null) {
         appId = defaultAppId
     }

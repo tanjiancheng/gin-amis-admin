@@ -6,8 +6,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/tanjiancheng/gin-amis-admin/pkg/util"
 	"github.com/koding/multiconfig"
+	"github.com/tanjiancheng/gin-amis-admin/pkg/util"
 )
 
 var (
@@ -241,6 +241,7 @@ type Gorm struct {
 	MaxOpenConns      int
 	MaxIdleConns      int
 	TablePrefix       string
+	GlobalTablePrefix string
 	EnableAutoMigrate bool
 }
 
