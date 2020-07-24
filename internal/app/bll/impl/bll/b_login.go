@@ -2,17 +2,18 @@ package bll
 
 import (
 	"context"
+	"github.com/casbin/casbin/v2"
 	"net/http"
 	"sort"
 
 	"github.com/LyricTian/captcha"
+	"github.com/google/wire"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/bll"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/model"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/schema"
 	"github.com/tanjiancheng/gin-amis-admin/pkg/auth"
 	"github.com/tanjiancheng/gin-amis-admin/pkg/errors"
 	"github.com/tanjiancheng/gin-amis-admin/pkg/util"
-	"github.com/google/wire"
 )
 
 var _ bll.ILogin = (*Login)(nil)
@@ -22,6 +23,7 @@ var LoginSet = wire.NewSet(wire.Struct(new(Login), "*"), wire.Bind(new(bll.ILogi
 
 // Login 登录管理
 type Login struct {
+	Enforcer        *casbin.SyncedEnforcer
 	Auth            auth.Auther
 	UserModel       model.IUser
 	UserRoleModel   model.IUserRole
@@ -80,6 +82,7 @@ func (a *Login) Verify(ctx context.Context, userName, password string) (*schema.
 	} else if item.Status != 1 {
 		return nil, errors.ErrUserDisable
 	}
+	LoadCasbinPolicy(ctx, a.Enforcer)
 
 	return item, nil
 }

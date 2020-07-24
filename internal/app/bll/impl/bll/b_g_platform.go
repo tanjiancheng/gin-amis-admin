@@ -50,6 +50,14 @@ func (a *GPlatform) Get(ctx context.Context, id string, opts ...schema.GPlatform
 	return item, nil
 }
 
+func (a *GPlatform) GetOptions(ctx context.Context) (*schema.GPlatformSelectOptions, error) {
+	item, err := a.GPlatformModel.GetOptions(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return item, nil
+}
+
 func (a *GPlatform) GetByAppId(ctx context.Context, appId string) (*schema.GPlatform, error) {
 	item, err := a.GPlatformModel.GetByAppId(ctx, appId)
 	if err != nil {

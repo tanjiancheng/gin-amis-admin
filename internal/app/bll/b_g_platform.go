@@ -14,6 +14,8 @@ type IGPlatform interface {
 	Check(ctx context.Context, appId string) error
 	// 查询指定数据
 	Get(ctx context.Context, id string, opts ...schema.GPlatformQueryOptions) (*schema.GPlatform, error)
+	// 获取select的查询配置
+	GetOptions(ctx context.Context) (*schema.GPlatformSelectOptions, error)
 	// 根据app_id查询对应的数据
 	GetByAppId(ctx context.Context, appId string) (*schema.GPlatform, error)
 	// 创建数据

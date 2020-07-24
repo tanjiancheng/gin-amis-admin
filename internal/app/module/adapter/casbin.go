@@ -3,13 +3,12 @@ package adapter
 import (
 	"context"
 	"fmt"
-
-	"github.com/tanjiancheng/gin-amis-admin/internal/app/model"
-	"github.com/tanjiancheng/gin-amis-admin/internal/app/schema"
-	"github.com/tanjiancheng/gin-amis-admin/pkg/logger"
 	casbinModel "github.com/casbin/casbin/v2/model"
 	"github.com/casbin/casbin/v2/persist"
 	"github.com/google/wire"
+	"github.com/tanjiancheng/gin-amis-admin/internal/app/model"
+	"github.com/tanjiancheng/gin-amis-admin/internal/app/schema"
+	"github.com/tanjiancheng/gin-amis-admin/pkg/logger"
 )
 
 var _ persist.Adapter = (*CasbinAdapter)(nil)

@@ -74,50 +74,22 @@
 <script src="/js/sdk.js"></script>
 
 <!-- 这个 js 主要包含一些简单导航边栏点击效果。 -->
-<script src="/js/app.js"></script>
 <script type="text/javascript">
     (function () {
         let id = getUrlParam('id');
+        let url = pageSchemaApi + "/api/v1/tpl_mall/" + id;
 
-        //加载菜单
-        function loadMenu(id, type) {
-            let amis = amisRequire("amis/embed");
-            let url = pageSchemaApi + "/api/v1/page_manager/" + id;
-            if (type.length <= 0) {
-                type = getUrlParam('type') || "";
-            }
-            if (type === 'history') {
-                url = pageSchemaApi + "/api/v1/page_version_history/" + id;
-            }
+        function renderPage(id) {
             $.ajax({
                 url: url,
                 type: "GET",
                 dataType: "json",
                 success: function (response) {
-                    let item = response.data;
-                    let source, page;
-                    if (type === 'history') {
-                        let pageManagerInfo = $.parseJSON(item.page_manger_info);
-                        source = $.parseJSON(pageManagerInfo.source);
-                        page = pageManagerInfo.identify || "";
-                    } else {
-                        source = $.parseJSON(item.source);
-                        page = item.identify || "";
-                    }
-
-                    let html = '';
-                    html += "<li class=\"a-AsideNav-item\">\n" +
-                        "       <a href=\"javascript:void(0);\" class=\"defined-nav-menu\" data-type=\"" + type + "\" data-id=\"" + item['id'] + "\">\n" +
-                        "           <i class=\"a-AsideNav-itemIcon " + item['icon'] + "\"></i>\n" +
-                        "           <span class=\"a-AsideNav-itemLabel\">" + item['name'] + "</span>\n" +
-                        "       </a>\n" +
-                        "   </li>";
-                    $("#page-defined").html(html);
-
+                    let source = JSON.parse(response.source);
+                    let amis = amisRequire("amis/embed");
                     amis.embed("#main", source, {
                         "data": {
                             "_authorization": getAuthorization(),
-                            "_page_name": page,
                             "_page_schema_api": pageSchemaApi,
                             "acl": {
                                 "can": (...permissions) => {
@@ -127,16 +99,10 @@
                         }
                     });
                 }
-            });
+            })
         }
 
-        loadMenu(id, "");
-
-        $(document.body).on('click', '.defined-nav-menu', function () {
-            let id = $(this).data('id');
-            let type = $(this).data('type');
-            loadMenu(id, type);
-        });
+        renderPage()
 
     })();
 </script>

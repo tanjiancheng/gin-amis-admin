@@ -28,6 +28,28 @@ func (a *GPlatform) getQueryOption(opts ...schema.GPlatformQueryOptions) schema.
 	return opt
 }
 
+func (a *GPlatform) GetOptions(ctx context.Context) (*schema.GPlatformSelectOptions, error) {
+	db := entity.GetGPlatformDB(ctx, a.DB)
+	db = db.Where("status = ?", 1)
+	var items entity.GPlatforms
+	err := db.Find(&items).Error
+	if err != nil {
+		return nil, err
+	}
+	var selectOptions schema.GPlatformSelectOptions
+	selectOptions.Options = append(selectOptions.Options, &schema.Option{
+		Label: "全部",
+		Value: "*",
+	})
+	for _, item := range items {
+		selectOptions.Options = append(selectOptions.Options, &schema.Option{
+			Label: item.Name,
+			Value: item.AppID,
+		})
+	}
+	return &selectOptions, nil
+}
+
 // Query 查询数据
 func (a *GPlatform) Query(ctx context.Context, params schema.GPlatformQueryParam, opts ...schema.GPlatformQueryOptions) (*schema.GPlatformQueryResult, error) {
 	opt := a.getQueryOption(opts...)

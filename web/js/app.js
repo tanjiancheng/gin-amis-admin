@@ -29,7 +29,7 @@
         });
     }
 
-    //获取当前用户权限列表
+    //获取当前用户可见菜单和权限列表
     function initMenuAndPermissionActions($) {
         $.ajax({
             async: false,
@@ -301,7 +301,7 @@
     //判断用户是否登录
     function checkLogin($) {
         let pathname = window.location.pathname;
-        if (pathname === "/page/preview.html") { //预览页面不判断登录
+        if (pathname === "/page/preview.html" || pathname === "/page/tpl_preview.html") { //预览页面不判断登录
             return;
         }
         $.ajax({
@@ -385,7 +385,7 @@
                                     },
                                     "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};payload.status=0;payload.msg=''; return payload;}}"
                                 },
-                                "redirect": "/login.html"
+                                "redirect": "/login.html?app_id=" + getAppId()
                             }
                         ]
                     })
@@ -538,7 +538,6 @@
         initMenuClick($);
         initNavMenu($);
         initSourceClick($);
-
     });
 
 

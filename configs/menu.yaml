@@ -148,7 +148,7 @@
             - method: POST
               path: "/api/v1/page_manager"
         - code: view
-          name: 查看
+          name: 查看源码
           resources:
             - method: GET
               path: "/api/v1/page_manager/:id"
@@ -193,8 +193,39 @@
               path: "/api/v1/menus"
     - name: 模板商城
       icon: fa fa-cart-arrow-down
-      router: "/tools/tpl_store"
+      router: "/tools/tpl_mall"
       sequence: 19
+      actions:
+        - code: add
+          name: 新建模板
+          resources:
+            - method: POST
+              path: "/api/v1/tpl_mall"
+        - code: create_page
+          name: 使用模板
+          resources:
+            - method: POST
+              path: "/api/v1/tpl_mall/:id/create_page"
+        - code: query
+          name: 查询
+          resources:
+            - method: GET
+              path: "/api/v1/tpl_mall"
+        - code: preview
+          name: 预览
+          resources:
+            - method: GET
+              path: "/api/v1/tpl_mall/:id"
+        - code: edit
+          name: 编辑
+          resources:
+            - method: PUT
+              path: "/api/v1/tpl_mall/:id"
+        - code: delete
+          name: 删除
+          resources:
+            - method: DELETE
+              path: "/api/v1/tpl_mall/:id"
 - name: 示例页面
   icon: fa fa-smile-o
   router: "/pages/example"

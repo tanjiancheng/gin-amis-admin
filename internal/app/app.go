@@ -13,24 +13,25 @@ import (
 
 	"github.com/LyricTian/captcha"
 	"github.com/LyricTian/captcha/store"
+	"github.com/go-redis/redis"
+	"github.com/google/gops/agent"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/config"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/injector"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/iutil"
 	"github.com/tanjiancheng/gin-amis-admin/pkg/logger"
-	"github.com/go-redis/redis"
-	"github.com/google/gops/agent"
 
 	// 引入swagger
 	_ "github.com/tanjiancheng/gin-amis-admin/internal/app/swagger"
 )
 
 type options struct {
-	ConfigFile string
-	ModelFile  string
-	MenuFile   string
-	PageFile   string
-	WWWDir     string
-	Version    string
+	ConfigFile  string
+	ModelFile   string
+	MenuFile    string
+	PageFile    string
+	TplMallFile string
+	WWWDir      string
+	Version     string
 }
 
 // Option 定义配置项
@@ -64,10 +65,16 @@ func SetMenuFile(s string) Option {
 	}
 }
 
-// SetPageFile 设定菜单数据文件
+// SetPageFile 设定页面管理数据文件
 func SetPageFile(s string) Option {
 	return func(o *options) {
 		o.PageFile = s
+	}
+}
+
+func SetTplMallFile(s string) Option {
+	return func(o *options) {
+		o.TplMallFile = s
 	}
 }
 
@@ -97,6 +104,9 @@ func Init(ctx context.Context, opts ...Option) (func(), error) {
 	}
 	if v := o.PageFile; v != "" {
 		config.C.Page.Data = v
+	}
+	if v := o.TplMallFile; v != "" {
+		config.C.TplMall.Data = v
 	}
 	config.PrintWithJSON()
 

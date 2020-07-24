@@ -49,6 +49,14 @@ func InitGormData(ctx context.Context, injector *Injector) error {
 		}
 	}
 
+	// 初始化模板商城数据
+	if config.C.TplMall.Enable && config.C.TplMall.Data != "" {
+		err := injector.GTplMallBll.InitData(ctx, config.C.TplMall.Data)
+		if err != nil {
+			return err
+		}
+	}
+
 	//初始化平台数据
 	err := injector.GPlatformBll.Create(ctx, schema.GPlatform{
 		AppID:      ginplus.GetDefaultAppId(),

@@ -22,3 +22,12 @@ type GPlatformQueryResult struct {
 	Data       []*GPlatform
 	PageResult *PaginationResult
 }
+
+type Option struct {
+	Label string `json:"label"`
+	Value string `json:"value"`
+}
+
+type GPlatformSelectOptions struct {
+	Options []*Option `json:"options"`
+}

@@ -69,7 +69,7 @@ func (a *PageManager) createPages(ctx context.Context, list schema.PageManagers)
 				Identify:   item.Identify,
 				Name:       item.Name,
 				Source:     item.Source,
-				Creator:    "system",
+				Creator:    "root",
 				CreateTime: time.Now().Unix(),
 				UpdateTime: time.Now().Unix(),
 			}

@@ -75,6 +75,7 @@ func AutoMigrate(db *gorm.DB) error {
 		new(entity.PageVersionHistory),
 		new(entity.Setting),
 		new(entity.GPlatform),
+		new(entity.GTplMall),
 	).Error
 	return err
 }

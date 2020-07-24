@@ -63,6 +63,16 @@ func (a *GPlatform) Get(c *gin.Context) {
 	ginplus.ResSuccess(c, item)
 }
 
+//获取select的查询配置
+func (a *GPlatform) GetOptions(c *gin.Context) {
+	item, err := a.GPlatformBll.GetOptions(c)
+	if err != nil {
+		ginplus.ResCustomError(c, err)
+		return
+	}
+	ginplus.ResCustomSuccess(c, item)
+}
+
 // Create 创建数据
 func (a *GPlatform) Create(c *gin.Context) {
 	ctx := c.Request.Context()
@@ -77,7 +87,7 @@ func (a *GPlatform) Create(c *gin.Context) {
 		ginplus.ResError(c, err)
 		return
 	}
-	ginplus.ResSuccess(c, nil)
+	ginplus.ResOK(c)
 }
 
 // Update 更新数据

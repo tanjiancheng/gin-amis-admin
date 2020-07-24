@@ -190,11 +190,14 @@ func (a *PageManager) Delete(c *gin.Context) {
 	}
 
 	//如果有菜单数据先删除菜单
-	err = a.MenuBll.Delete(ctx, menuInfo.ID)
-	if err != nil {
-		ginplus.ResError(c, err)
-		return
+	if menuInfo != nil {
+		err = a.MenuBll.Delete(ctx, menuInfo.ID)
+		if err != nil {
+			ginplus.ResError(c, err)
+			return
+		}
 	}
+
 	err = a.PageManagerBll.Delete(ctx, c.Param("id"))
 	if err != nil {
 		ginplus.ResError(c, err)

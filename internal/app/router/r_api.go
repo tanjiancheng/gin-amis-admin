@@ -55,6 +55,11 @@ func (a *Router) RegisterAPI(app *gin.Engine) {
 				gPageManager.GET(":id", a.PageManagerAPI.Get)
 			}
 
+			gPlatform := pub.Group("platforms")
+			{
+				gPlatform.GET(":id", a.GPlatFormAPI.GetOptions)
+			}
+
 			pub.POST("/refresh-token", a.LoginAPI.RefreshToken)
 		}
 
@@ -143,5 +148,19 @@ func (a *Router) RegisterAPI(app *gin.Engine) {
 			gPlatform.PATCH(":id/enable", a.GPlatFormAPI.Enable)
 			gPlatform.PATCH(":id/disable", a.GPlatFormAPI.Disable)
 		}
+
+		gTplMall := v1.Group("tpl_mall")
+		{
+			gTplMall.GET("", a.GTplMallAPI.Query)
+			gTplMall.GET(":id", a.GTplMallAPI.Get)
+			gTplMall.POST("", a.GTplMallAPI.Create)
+			gTplMall.PUT(":id", a.GTplMallAPI.Update)
+			gTplMall.DELETE(":id", a.GTplMallAPI.Delete)
+			gTplMall.PATCH(":id/publish", a.GTplMallAPI.Publish)
+			gTplMall.PATCH(":id/enable", a.GTplMallAPI.Enable)
+			gTplMall.PATCH(":id/disable", a.GTplMallAPI.Disable)
+		}
+		v1.Any("/tpl_mall.mock/:identity/:path", a.GTplMallAPI.Mock)      //用于预览里面的api接口
+		v1.Any("/tpl_mall.mock/:identity/:path/:tid", a.GTplMallAPI.Mock) //用于预览里面的api接口
 	}
 }

@@ -55,6 +55,10 @@ func newWebCmd(ctx context.Context) *cli.Command {
 				Usage: "初始化页面管理数据配置文件(.yaml)",
 			},
 			&cli.StringFlag{
+				Name:  "tpl-mall",
+				Usage: "初始模板商城数据配置文件(.yaml)",
+			},
+			&cli.StringFlag{
 				Name:  "www",
 				Usage: "静态站点目录",
 			},
@@ -66,6 +70,7 @@ func newWebCmd(ctx context.Context) *cli.Command {
 				app.SetWWWDir(c.String("www")),
 				app.SetMenuFile(c.String("menu")),
 				app.SetPageFile(c.String("page")),
+				app.SetTplMallFile(c.String("tpl-mall")),
 				app.SetVersion(VERSION))
 		},
 	}

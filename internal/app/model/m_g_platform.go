@@ -11,6 +11,8 @@ type IGPlatform interface {
 	Query(ctx context.Context, params schema.GPlatformQueryParam, opts ...schema.GPlatformQueryOptions) (*schema.GPlatformQueryResult, error)
 	// 查询指定数据
 	Get(ctx context.Context, id string, opts ...schema.GPlatformQueryOptions) (*schema.GPlatform, error)
+	// 查询select的选项
+	GetOptions(ctx context.Context) (*schema.GPlatformSelectOptions, error)
 	// 根据appId查询数据
 	GetByAppId(ctx context.Context, appId string) (*schema.GPlatform, error)
 	// 创建数据

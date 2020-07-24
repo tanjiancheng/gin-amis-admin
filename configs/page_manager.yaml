@@ -88,7 +88,7 @@
                             "controls": [
                                 {
                                     "type": "json-editor",
-                                    "value": "{\"status\":0,\"msg\":\"OK\",\"data\":{\"count\":8,\"rows\":[{\"id\":7,\"identify\":\"/tools/tpl_store\",\"name\":\"模板商城\",\"source\":\"示例源码\"},{\"id\":8,\"identify\":\"/tools/tpl_store\",\"name\":\"模板商城\",\"source\":\"示例源码\"}]}}"
+                                    "value": "{\"status\":0,\"msg\":\"OK\",\"data\":{\"count\":8,\"rows\":[{\"id\":7,\"identify\":\"/tools/tpl_mall\",\"name\":\"模板商城\",\"source\":\"示例源码\"},{\"id\":8,\"identify\":\"/tools/tpl_mall\",\"name\":\"模板商城\",\"source\":\"示例源码\"}]}}"
                                 }
                             ]
                         },
@@ -315,6 +315,7 @@
                     "label": "菜单图标",
                     "sortable": true,
                     "type": "text",
+                    "size": "lg",
                     "placeholder": "fa fa-bars",
                     "remark": "fontawesome图标"
                   },
@@ -579,6 +580,7 @@
                         "label": "菜单图标",
                         "sortable": true,
                         "type": "text",
+                        "size": "lg",
                         "placeholder": "fa fa-bars",
                         "remark": "fontawesome图标"
                       },
@@ -1647,7 +1649,8 @@
               },
               "data": {
                 "&": "$$"
-              }
+              },
+              "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;}return payload;}"
             },
             "keepItemSelectionOnPageChange": true,
             "filter": {
@@ -2767,16 +2770,519 @@
         ]
     }
 - name: "模板商城"
-  identify: "/tools/tpl_store"
+  identify: "/tools/tpl_mall"
   source: |
     {
-        "$schema": "https://houtai.baidu.com/v2/schemas/page.json",
+        "$schema": "http://amis.baidu.com/v2/schemas/page.json#",
         "type": "page",
         "title": "模板商城",
-        "body": [
-            {
-                "type": "plain",
-                "text": "正在努力开发中..."
+        "body": {
+            "name": "tpl-mall-table",
+            "type": "crud",
+            "mode": "cards",
+            "draggable": false,
+            "pageField": "current",
+            "perPageField": "pageSize",
+            "syncLocation": false,
+            "api": {
+                "url": "${_page_schema_api|raw}/api/v1/tpl_mall",
+                "method": "get",
+                "headers": {
+                    "Authorization": "${_authorization}"
+                },
+                "data": {
+                    "&": "$$"
+                },
+                "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};payload.data.rows=payload.list;payload.data.count=payload.pagination.total;payload.status=0;payload.msg='ok';}return payload;}"
+            },
+            "keepItemSelectionOnPageChange": true,
+            "filter": {
+                "title": "条件搜索",
+                "submitText": "",
+                "visibleOn": "acl.can('/tools/tpl_mall::query')",
+                "controls": [
+                    {
+                        "type": "text",
+                        "name": "queryValue",
+                        "placeholder": "搜索模板名称",
+                        "addOn": {
+                            "label": "搜索",
+                            "type": "submit"
+                        }
+                    }
+                ]
+            },
+            "filterTogglable": true,
+            "headerToolbar": [
+                {
+                    "type": "button",
+                    "actionType": "drawer",
+                    "label": "新建模板",
+                    "icon": "fa fa-plus pull-left",
+                    "primary": true,
+                    "visibleOn": "acl.can('/tools/tpl_mall::add')",
+                    "drawer": {
+                        "title": "新建模板",
+                        "position": "left",
+                        "size": "lg",
+                        "resizable": true,
+                        "body": {
+                            "type": "form",
+                            "name": "sample-edit-form",
+                            "api": {
+                                "url": "${_page_schema_api|raw}/api/v1/tpl_mall",
+                                "method": "post",
+                                "headers": {
+                                    "Authorization": "${_authorization}"
+                                },
+                                "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};payload.status=0;payload.msg='ok';}return payload;}"
+                            },
+                            "controls": [
+                                {
+                                    "type": "text",
+                                    "name": "identify",
+                                    "label": "模板标识",
+                                    "required": true,
+                                    "description": "必须唯一"
+                                },
+                                {
+                                    "type": "select",
+                                    "name": "scope",
+                                    "multiple": true,
+                                    "inline": true,
+                                    "label": "应用限制",
+                                    "description": "选择模式是否对应某个平台可见，可多选",
+                                    "required": true,
+                                    "source": {
+                                        "method": "get",
+                                        "url": "${_page_schema_api|raw}/api/v1/pub/platforms/options",
+                                        "headers": {
+                                            "Authorization": "${_authorization}"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "text",
+                                    "name": "name",
+                                    "label": "模板名称",
+                                    "required": true
+                                },
+                                {
+                                    "type": "textarea",
+                                    "name": "desc",
+                                    "label": "模板描述",
+                                    "description": "可为空"
+                                },
+                                {
+                                    "type": "text",
+                                    "name": "icon",
+                                    "label": "模板图标",
+                                    "required": true,
+                                    "value": "fa fa-cogs",
+                                    "size": "lg",
+                                    "remark": "fontawesome图标"
+                                },
+                                {
+                                    "type": "divider"
+                                },
+                                {
+                                    "type": "tabs",
+                                    "toolbar": [
+                                        {
+                                            "type": "button",
+                                            "label": "预览",
+                                            "level": "success",
+                                            "actionType": "dialog",
+                                            "tooltip": "预览",
+                                            "visibleOn": "acl.can('/tools/tpl_mall::preview')",
+                                            "dialog": {
+                                                "disabled": true,
+                                                "size": "full",
+                                                "title": "预览",
+                                                "body": {
+                                                    "type": "iframe",
+                                                    "src": "/page/tpl_preview.html?id=$id"
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "tabs": [
+                                        {
+                                            "title": "页面源码",
+                                            "controls": [
+                                                {
+                                                    "type": "editor",
+                                                    "name": "source",
+                                                    "label": "页面源码",
+                                                    "language": "json",
+                                                    "className": "h-full",
+                                                    "size": "xxl",
+                                                    "required": true
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "title": "mock接口",
+                                            "controls": [
+                                                {
+                                                    "type": "alert",
+                                                    "body": "<p>浏览器可以使用<code>${_page_schema_api}/api/v1/tpl_mall/mock/${identify| default: <模板标识>}/&ltpath&gt;</code>访问调试</p><p>页面源码可以使用<code>\\${_page_schema_api}/api/v1/tpl_mall/mock/${identify| default: <模板标识>}/&ltpath&gt;</code> 调用访问</p>",
+                                                    "level": "info"
+                                                },
+                                                {
+                                                    "type": "combo",
+                                                    "name": "mock_data",
+                                                    "label": false,
+                                                    "multiple": true,
+                                                    "value": [
+                                                        {}
+                                                    ],
+                                                    "controls": [
+                                                        {
+                                                            "name": "path",
+                                                            "type": "text",
+                                                            "placeholder": "path(eg:add)"
+                                                        },
+                                                        {
+                                                            "name": "data",
+                                                            "type": "textarea",
+                                                            "placeholder": "data"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "pagination",
+                    "align": "right"
+                }
+            ],
+            "footerToolbar": [
+                "statistics",
+                "switch-per-page",
+                "pagination"
+            ],
+            "card": {
+                "header": {
+                    "title": "${icon_full|raw}$name<div class=\"a-Card-subTitle\"><span class=\"a-TplField\">$desc</span></div>",
+                    "highlight": true,
+                    "avatar": "",
+                    "avatarClassName": "pull-left thumb b-3x m-r"
+                },
+                "actions": [
+                    {
+                        "type": "button",
+                        "actionType": "drawer",
+                        "label": "使用模板",
+                        "tooltip": "从此模板创建页面",
+                        "primary": true,
+                        "visibleOn": "acl.can('/tools/tpl_mall::create_page')",
+                        "drawer": {
+                            "title": "从此模板创建页面",
+                            "position": "left",
+                            "size": "lg",
+                            "resizable": true,
+                            "data": {
+                                "&": "$$",
+                                "identify": "/pages/${identify}"
+                            },
+                            "body": {
+                                "type": "form",
+                                "redirect": "/#/tools/page_manager",
+                                "name": "sample-edit-form",
+                                "api": {
+                                    "url": "${_page_schema_api|raw}/api/v1/page_manager",
+                                    "method": "post",
+                                    "headers": {
+                                        "Authorization": "${_authorization}"
+                                    },
+                                    "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};payload.status=0;payload.msg='ok';}return payload;}"
+                                },
+                                "controls": [
+                                    {
+                                        "type": "text",
+                                        "name": "name",
+                                        "label": "页面名称",
+                                        "required": true
+                                    },
+                                    {
+                                        "type": "text",
+                                        "name": "identify",
+                                        "label": "页面标识",
+                                        "description": "对应菜单的路由，必须唯一",
+                                        "required": true,
+                                        "placeholder": "/myapp/hello"
+                                    },
+                                    {
+                                        "type": "editor",
+                                        "name": "source",
+                                        "label": "页面源码",
+                                        "language": "json",
+                                        "className": "h-full",
+                                        "size": "xxl",
+                                        "required": true
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "type": "button",
+                        "label": "预览",
+                        "actionType": "dialog",
+                        "tooltip": "预览",
+                        "visibleOn": "acl.can('/tools/tpl_mall::preview')",
+                        "dialog": {
+                            "disabled": true,
+                            "size": "full",
+                            "title": "预览",
+                            "body": {
+                                "type": "iframe",
+                                "src": "/page/tpl_preview.html?id=$id"
+                            }
+                        }
+                    },
+                    {
+                        "type": "button",
+                        "label": "编辑",
+                        "actionType": "drawer",
+                        "visibleOn": "acl.can('/tools/tpl_mall::edit')",
+                        "drawer": {
+                            "title": "编辑",
+                            "position": "left",
+                            "size": "lg",
+                            "resizable": true,
+                            "body": {
+                                "type": "form",
+                                "name": "tpl-mall-edit-form",
+                                "api": {
+                                    "url": "${_page_schema_api|raw}/api/v1/tpl_mall/$id",
+                                    "method": "put",
+                                    "headers": {
+                                        "Authorization": "${_authorization}"
+                                    },
+                                    "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};payload.status=0;payload.msg='ok';}return payload;}"
+                                },
+                                "controls": [
+                                    {
+                                        "type": "text",
+                                        "name": "identify",
+                                        "label": "模板标识",
+                                        "required": true,
+                                        "description": "必须唯一"
+                                    },
+                                    {
+                                        "type": "select",
+                                        "name": "scope",
+                                        "multiple": true,
+                                        "inline": true,
+                                        "label": "应用限制",
+                                        "description": "选择模式是否对应某个平台可见，可多选",
+                                        "required": true,
+                                        "source": {
+                                            "method": "get",
+                                            "url": "${_page_schema_api|raw}/api/v1/pub/platforms/options",
+                                            "headers": {
+                                                "Authorization": "${_authorization}"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "name": "name",
+                                        "label": "模板名称",
+                                        "required": true
+                                    },
+                                    {
+                                        "type": "textarea",
+                                        "name": "desc",
+                                        "label": "模板描述",
+                                        "description": "可为空"
+                                    },
+                                    {
+                                        "type": "text",
+                                        "name": "icon",
+                                        "label": "模板图标",
+                                        "required": true,
+                                        "value": "fa fa-cogs",
+                                        "size": "lg",
+                                        "remark": "fontawesome图标"
+                                    },
+                                    {
+                                        "type": "divider"
+                                    },
+                                    {
+                                        "type": "tabs",
+                                        "toolbar": [
+                                            {
+                                                "type": "button",
+                                                "label": "预览",
+                                                "level": "success",
+                                                "actionType": "dialog",
+                                                "tooltip": "预览",
+                                                "visibleOn": "acl.can('/tools/tpl_mall::preview')",
+                                                "dialog": {
+                                                    "disabled": true,
+                                                    "size": "full",
+                                                    "title": "预览",
+                                                    "body": {
+                                                        "type": "iframe",
+                                                        "src": "/page/tpl_preview.html?id=$id"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "tabs": [
+                                            {
+                                                "title": "页面源码",
+                                                "controls": [
+                                                    {
+                                                        "type": "editor",
+                                                        "name": "source",
+                                                        "label": "页面源码",
+                                                        "language": "json",
+                                                        "className": "h-full",
+                                                        "size": "xxl",
+                                                        "required": true
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "title": "mock接口",
+                                                "controls": [
+                                                    {
+                                                        "type": "alert",
+                                                        "body": "<p>浏览器可以使用<code>${_page_schema_api}/api/v1/tpl_mall/mock/${identify| default: <模板标识>}/&ltpath&gt;</code>访问调试</p><p>页面源码可以使用<code>\\${_page_schema_api}/api/v1/tpl_mall/mock/${identify| default: <模板标识>}/&ltpath&gt;</code> 调用访问</p>",
+                                                        "level": "info"
+                                                    },
+                                                    {
+                                                        "type": "combo",
+                                                        "name": "mock_data",
+                                                        "label": false,
+                                                        "multiple": true,
+                                                        "value": [
+                                                            {}
+                                                        ],
+                                                        "controls": [
+                                                            {
+                                                                "name": "path",
+                                                                "type": "text",
+                                                                "placeholder": "path"
+                                                            },
+                                                            {
+                                                                "name": "data",
+                                                                "type": "textarea",
+                                                                "placeholder": "data"
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "type": "button",
+                        "label": "发布",
+                        "actionType": "ajax",
+                        "confirmText": "您确认要发布该模板吗",
+                        "visibleOn": "data.status == 0",
+                        "api": {
+                            "url": "${_page_schema_api|raw}/api/v1/tpl_mall/$id/publish",
+                            "method": "patch",
+                            "headers": {
+                                "Authorization": "${_authorization}"
+                            },
+                            "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};payload.status=0;payload.msg='ok'; }return payload;}"
+                        }
+                    },
+                    {
+                        "type": "button",
+                        "label": "禁用",
+                        "actionType": "ajax",
+                        "confirmText": "您确认要禁用该模板吗",
+                        "visibleOn": "data.status == 1",
+                        "api": {
+                            "url": "${_page_schema_api|raw}/api/v1/tpl_mall/$id/disable",
+                            "method": "patch",
+                            "headers": {
+                                "Authorization": "${_authorization}"
+                            },
+                            "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};payload.status=0;payload.msg='ok'; }return payload;}"
+                        }
+                    },
+                    {
+                        "type": "button",
+                        "label": "启用",
+                        "actionType": "ajax",
+                        "confirmText": "您确认要启用该模板吗",
+                        "visibleOn": "data.status == -1",
+                        "api": {
+                            "url": "${_page_schema_api|raw}/api/v1/tpl_mall/$id/enable",
+                            "method": "patch",
+                            "headers": {
+                                "Authorization": "${_authorization}"
+                            },
+                            "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};payload.status=0;payload.msg='ok'; }return payload;}"
+                        }
+                    },
+                    {
+                        "type": "button",
+                        "label": "删除",
+                        "actionType": "ajax",
+                        "confirmText": "您确认要删除?",
+                        "visibleOn": "acl.can('/tools/tpl_mall::del')",
+                        "api": {
+                            "url": "${_page_schema_api|raw}/api/v1/tpl_mall/$id",
+                            "method": "delete",
+                            "headers": {
+                                "Authorization": "${_authorization}"
+                            },
+                            "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};payload.status=0;payload.msg='ok'; }return payload;}"
+                        }
+                    }
+                ],
+                "body": [
+                    {
+                        "name": "creator",
+                        "label": "创建人",
+                        "sortable": true
+                    },
+                    {
+                        "name": "create_time",
+                        "label": "创建时间",
+                        "type": "date",
+                        "format": "YYYY-MM-DD hh:mm:ss",
+                        "toggled": true
+                    },
+                    {
+                        "name": "scope",
+                        "label": "适用平台",
+                        "type": "mapping",
+                        "map": {
+                            "*": "全部"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "label": "状态",
+                        "type": "mapping",
+                        "map": {
+                            "0": "<span class='label label-warning'>未发布</span>",
+                            "1": "<span class='label label-success'>正常</span>",
+                            "-1": "<span class='label label-danger'>禁用</span>"
+                        }
+                    }
+                ]
             }
-        ]
+        }
     }

@@ -83,7 +83,11 @@ func BuildInjector() (*Injector, func(), error) {
 	gPlatformModel := &model.GPlatform{
 		DB: db,
 	}
+	gTplModel := &model.GTplMall{
+		DB: db,
+	}
 	login := &bll.Login{
+		Enforcer:        syncedEnforcer,
 		Auth:            auther,
 		UserModel:       user,
 		UserRoleModel:   userRole,
@@ -121,6 +125,10 @@ func BuildInjector() (*Injector, func(), error) {
 	bllGPlatformBll := &bll.GPlatform{
 		GPlatformModel: gPlatformModel,
 	}
+	bllGTplMallBll := &bll.GTplMall{
+		GTplMallModel: gTplModel,
+		TransModel:    trans,
+	}
 	apiLogin := &api.Login{
 		LoginBll:     login,
 		GPlatformBll: bllGPlatformBll,
@@ -156,7 +164,7 @@ func BuildInjector() (*Injector, func(), error) {
 		PageVersionHistoryBll: bllPageVersionHistory,
 	}
 	apiSetting := &api.Setting{
-		SettingBll: bllSetting,
+		SettingBll:   bllSetting,
 		GPlatformBll: bllGPlatformBll,
 	}
 	apiApp := &api.App{
@@ -168,6 +176,9 @@ func BuildInjector() (*Injector, func(), error) {
 	}
 	apiGPlatform := &api.GPlatform{
 		GPlatformBll: bllGPlatformBll,
+	}
+	apiGTplMall := &api.GTplMall{
+		GTplMallBll: bllGTplMallBll,
 	}
 	routerRouter := &router.Router{
 		Auth:                  auther,
@@ -182,6 +193,7 @@ func BuildInjector() (*Injector, func(), error) {
 		SettingAPI:            apiSetting,
 		AppAPI:                apiApp,
 		GPlatFormAPI:          apiGPlatform,
+		GTplMallAPI:           apiGTplMall,
 	}
 	engine := InitGinEngine(routerRouter)
 	injector := &Injector{
@@ -191,6 +203,7 @@ func BuildInjector() (*Injector, func(), error) {
 		MenuBll:        bllMenu,
 		PageBll:        bllPage,
 		GPlatformBll:   bllGPlatformBll,
+		GTplMallBll:    bllGTplMallBll,
 	}
 	return injector, func() {
 		cleanup3()

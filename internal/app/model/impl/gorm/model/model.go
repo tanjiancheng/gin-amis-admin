@@ -16,4 +16,6 @@ var ModelSet = wire.NewSet(
 	PageManagerSet,
 	SettingSet,
 	AppSet,
+	GPlatformSet,
+	GTplMallSet,
 )

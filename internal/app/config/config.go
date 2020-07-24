@@ -65,6 +65,7 @@ type Config struct {
 	HTTP         HTTP
 	Menu         Menu
 	Page         Page
+	TplMall      TplMall
 	Casbin       Casbin
 	Log          Log
 	LogGormHook  LogGormHook
@@ -104,6 +105,11 @@ type Menu struct {
 
 // Page 页面管理配置参数
 type Page struct {
+	Enable bool
+	Data   string
+}
+
+type TplMall struct {
 	Enable bool
 	Data   string
 }

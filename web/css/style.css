@@ -16,9 +16,9 @@ html, body {
     padding: 8px;
 }
 
-.amis-scope .a-Modal {
+/*.multi-modal .amis-scope .a-Modal {
     z-index: 1100 !important;
-}
+}*/
 
 .a-Modal--2th {
     z-index: 1400 !important;
@@ -65,7 +65,7 @@ html, body {
 }
 
 .float-right {
-    float:right;
+    float: right;
 }
 
 /*.editor-full .monaco-editor {

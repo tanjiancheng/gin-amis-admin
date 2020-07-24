@@ -19,4 +19,5 @@ type Injector struct {
 	MenuBll        bll.IMenu
 	PageBll        bll.IPageManager
 	GPlatformBll   bll.IGPlatform
+	GTplMallBll    bll.IGTplMall
 }

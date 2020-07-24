@@ -33,6 +33,7 @@ type Router struct {
 	SettingAPI            *api.Setting
 	AppAPI                *api.App
 	GPlatFormAPI          *api.GPlatform
+	GTplMallAPI           *api.GTplMall
 }
 
 // Register 注册路由
