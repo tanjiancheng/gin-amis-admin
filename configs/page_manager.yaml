@@ -123,11 +123,11 @@
                     "tab": [
                         {
                             "type": "html",
-                            "html": "<h3>控制按钮的显示</h3>"
+                            "html": "<h3>控制组件的显示</h3>"
                         },
                         {
                             "type": "html",
-                            "html": "<p>如果要根据权限控制相关按钮的显示隐藏，需要在相关页面组件中使用<code>visibleOn</code>字段来显示，当条件为true时会显示相应的组件，代码如下:"
+                            "html": "<p>如果要根据权限控制相关组件的显示隐藏，需要在相关页面组件中使用<code>visibleOn</code>字段来显示，当条件为true时会显示相应的组件，代码如下:"
                         },
                         {
                             "title": "",
@@ -173,6 +173,24 @@
                         {
                             "type": "html",
                             "html": "其中\\${_authorization}是系统登录后生成的jwt字符串全局变量，可以在页面中引用到，更多全局变量的说明可以查看<a>系统管理/系统配置中</a>的全局变量配置"
+                        }
+                    ]
+                },
+                {
+                    "title": "全局变量",
+                    "tab": [
+                        {
+                            "type": "html",
+                            "html": "<h3>系统默认全局变量</h3>"
+                        },
+                        {
+                            "type": "alert",
+                            "level": "warning",
+                            "body": "<p><b>权限资格: </b>\\${_authorization}</p><p><b>当前路由:</b>\\${_page_name}</p><p><b>当前应用标识:</b>\\${_app_id}</p><p><b>系统接口地址:</b>\\${_page_schema_api}  (对应web/js/config.js的pageSchemaApi配置，可自行修改)</p>"
+                        },
+                        {
+                            "type": "html",
+                            "html": "<p><code>注:</code>以上变量可以直接在页面源码里面调用到对应的值</p>"
                         }
                     ]
                 }
@@ -2926,7 +2944,7 @@
                                             "controls": [
                                                 {
                                                     "type": "alert",
-                                                    "body": "<p>浏览器可以使用<code>${_page_schema_api}/api/v1/tpl_mall/mock/${identify| default: <模板标识>}/&ltpath&gt;</code>访问调试</p><p>页面源码可以使用<code>\\${_page_schema_api}/api/v1/tpl_mall/mock/${identify| default: <模板标识>}/&ltpath&gt;</code> 调用访问</p>",
+                                                    "body": "<p>浏览器可以使用<code>${_page_schema_api}/api/v1/tpl_mall.mock/mock/${identify| default: <模板标识>}/&ltpath&gt;</code>访问调试</p><p>页面源码可以使用<code>\\${_page_schema_api}/api/v1/tpl_mall.mock/mock/${identify| default: <模板标识>}/&ltpath&gt;</code>调用访问</p>",
                                                     "level": "info"
                                                 },
                                                 {
@@ -3158,7 +3176,7 @@
                                                 "controls": [
                                                     {
                                                         "type": "alert",
-                                                        "body": "<p>浏览器可以使用<code>${_page_schema_api}/api/v1/tpl_mall/mock/${identify| default: <模板标识>}/&ltpath&gt;</code>访问调试</p><p>页面源码可以使用<code>\\${_page_schema_api}/api/v1/tpl_mall/mock/${identify| default: <模板标识>}/&ltpath&gt;</code> 调用访问</p>",
+                                                        "body": "<p>浏览器可以使用<code>${_page_schema_api}/api/v1/tpl_mall.mock/mock/${identify| default: <模板标识>}/&ltpath&gt;</code>访问调试</p><p>页面源码可以使用<code>\\${_page_schema_api}/api/v1/tpl_mall.mock/mock/${identify| default: <模板标识>}/&ltpath&gt;</code>调用访问</p>",
                                                         "level": "info"
                                                     },
                                                     {
