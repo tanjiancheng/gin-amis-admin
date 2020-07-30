@@ -108,7 +108,6 @@ func (a *PageManager) Get(ctx context.Context, id string, opts ...schema.PageMan
 	} else if item == nil {
 		return nil, errors.ErrNotFound
 	}
-
 	return item, nil
 }
 
@@ -218,6 +217,7 @@ func (a *PageManager) Revert(ctx context.Context, pageVersionHistoryId string) e
 	var pageManager schema.PageManager
 	pageManager.Name = versionPageManager.Name
 	pageManager.Source = versionPageManager.Source
+	pageManager.Meta = versionPageManager.Meta
 	pageManager.UpdateTime = time.Now().Unix()
 	return a.PageManagerModel.Update(ctx, pageManagerId, pageManager)
 }

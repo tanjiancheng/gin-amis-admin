@@ -45,6 +45,122 @@
                     ]
                 },
                 {
+                    "title": "页面元数据",
+                    "tab": [
+                        {
+                            "type": "html",
+                            "html": "<h3>概念说明</h3>"
+                        },
+                        {
+                            "type": "html",
+                            "html": "<p>页面元数据是用于定义页面源码上经常变动和可复用的部分，方便快速的修改对应的可变配置,避免从一大串源码中查找对应的需要修改的部分，同时也避免重复的值多次修改遗漏导致的不一致问题，是基于amis的json shcema上的再一层封装<p>"
+                        },
+                        {
+                            "type": "divider"
+                        },
+                        {
+                            "type": "html",
+                            "html": "<h4>1. 页面元数据示例</h4>"
+                        },
+                        {
+                            "title": "",
+                            "type": "form",
+                            "autoFocus": false,
+                            "submitText": null,
+                            "actions": [],
+                            "controls": [
+                                {
+                                    "type": "json-editor",
+                                    "value": "{\"base\":{\"title\":\"默认标题1\"},\"acl\":{\"search\":\"acl.can('*')\",\"add\":\"acl.can('*')\",\"operation\":\"acl.can('*')\",\"update\":\"acl.can('*')\",\"delete\":\"acl.can('*')\"},\"api\":{\"query\":{\"url\":\"${_page_schema_api|raw}/api/v1/tpl_mall.mock/simple_crud_table_tpl/query\",\"method\":\"get\",\"headers\":{\"Authorization\":\"${_authorization}\"},\"data\":{\"&\":\"$$\"}},\"create\":{\"url\":\"${_page_schema_api|raw}/api/v1/tpl_mall.mock/simple_crud_table_tpl/add\",\"method\":\"post\",\"headers\":{\"Authorization\":\"${_authorization}\"}},\"update\":{\"url\":\"${_page_schema_api|raw}/api/v1/tpl_mall.mock/simple_crud_table_tpl/edit/$id\",\"method\":\"put\",\"headers\":{\"Authorization\":\"${_authorization}\"}},\"delete\":{\"url\":\"${_page_schema_api|raw}/api/v1/tpl_mall.mock/simple_crud_table_tpl/delete/$id\",\"method\":\"delete\",\"headers\":{\"Authorization\":\"${_authorization}\"}}},\"fields\":{\"user_name\":{\"name\":\"user_name\",\"label\":\"用户名\",\"sortable\":true,\"type\":\"text\",\"@create|@update\":{\"required\":true},\"@list\":{}},\"password\":{\"name\":\"password\",\"label\":\"密码\",\"sortable\":true,\"type\":\"password\",\"@create\":{\"required\":true},\"@update\":{}},\"real_name\":{\"name\":\"real_name\",\"label\":\"真实姓名\",\"sortable\":true,\"type\":\"text\",\"@create|@update\":{\"required\":true},\"@list\":{}},\"status\":{\"name\":\"status\",\"label\":\"用户状态\",\"sortable\":true,\"type\":\"mapping\",\"toggled\":true,\"map\":{\"1\":\"<span class='label label-success'>启用</span>\",\"2\":\"<span class='label label-danger'>禁用</span>\"},\"@create|@update\":{\"-map\":true,\"-toggled\":true,\"type\":\"radios\",\"name\":\"status\",\"label\":\"用户状态\",\"inline\":true,\"value\":1,\"required\":true,\"options\":[{\"label\":\"正常\",\"value\":1},{\"label\":\"停用\",\"value\":2}]},\"@list\":{}},\"email\":{\"name\":\"email\",\"label\":\"邮箱\",\"sortable\":true,\"type\":\"text\",\"toggled\":true,\"@list\":{},\"@create|@update\":{}},\"phone\":{\"name\":\"phone\",\"label\":\"手机号\",\"sortable\":true,\"type\":\"text\",\"toggled\":true,\"@list\":{},\"@create|@update\":{}},\"created_at\":{\"name\":\"created_at\",\"label\":\"创建时间\",\"sortable\":true,\"type\":\"date\",\"format\":\"YYYY-MM-DD hh:mm:ss\",\"toggled\":true,\"@list\":{}}}}"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "html",
+                            "html": "<p>以上元数据使用json格式定义</p><p>页面源码上可以使用<code>\\@meta.base</code>或者<code>\\@meta.base.title</code>访问到对应的格式</p><p>其中@meta.后面的部分可以使用<a href='https://jmespath.org/' target='_blank'>jmespath</a>的语法查询对应的json数据</p>"
+                        },
+                        {
+                            "type": "html",
+                            "html": "<p>其中@meta.fields为特殊字段,里面可以根据字段定义场景然后在源码中通过<code>@meta.scene.场景名称</code>引用到,比如以下格式的字段</p>"
+                        },
+                        {
+                            "title": "",
+                            "type": "form",
+                            "autoFocus": false,
+                            "submitText": null,
+                            "actions": [],
+                            "controls": [
+                                {
+                                    "type": "json-editor",
+                                    "value": "{\"fields\":{\"user_name\":{\"name\":\"user_name\",\"label\":\"用户名\",\"sortable\":true,\"type\":\"text\",\"@create|@update\":{\"required\":true},\"@list\":{}}}}"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "html",
+                            "html": "<p>最终会转换成以下格式</p>"
+                        },
+                        {
+                            "title": "",
+                            "type": "form",
+                            "autoFocus": false,
+                            "submitText": null,
+                            "actions": [],
+                            "controls": [
+                                {
+                                    "type": "json-editor",
+                                    "value": "{\"fields\":{\"user_name\":{\"name\":\"user_name\",\"label\":\"用户名\",\"sortable\":true,\"type\":\"text\",\"@create|@update\":{\"required\":true},\"@list\":{}}},\"scene\":{\"create\":[{\"name\":\"user_name\",\"label\":\"用户名\",\"sortable\":true,\"type\":\"text\",\"required\":true}],\"update\":[{\"name\":\"user_name\",\"label\":\"用户名\",\"sortable\":true,\"type\":\"text\",\"required\":true}],\"list\":[{\"name\":\"user_name\",\"label\":\"用户名\",\"sortable\":true,\"type\":\"text\"}]}}"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "html",
+                            "html": "<p>其中@meta.scene.list|@expand如果管道<code>|</code>后带有@表示自己实现的管道方法,目前已实现的自定义管道方法如下:</p>"
+                        },
+                        {
+                            "type": "html",
+                            "html": "<code>expand</code>: 展开对应的json格式,如[{\"a\": 1},{\"b\", 2}] expand 后变为 {\"a\": 1},{\"b\", 2}"
+                        },
+                        {
+                            "type": "divider"
+                        },
+                        {
+                            "type": "html",
+                            "html": "<h4>2. 带meta的页面源码示例</h4>"
+                        },
+                        {
+                            "title": "",
+                            "type": "form",
+                            "autoFocus": false,
+                            "submitText": null,
+                            "actions": [],
+                            "controls": [
+                                {
+                                    "type": "json-editor",
+                                    "value": "{\"$schema\":\"http://amis.baidu.com/v2/schemas/page.json#\",\"type\":\"page\",\"title\":\"@meta.base.title\",\"body\":{\"name\":\"crud-manage-table\",\"type\":\"crud\",\"draggable\":false,\"pageField\":\"current\",\"perPageField\":\"pageSize\",\"syncLocation\":false,\"api\":\"@meta.api.query\",\"keepItemSelectionOnPageChange\":true,\"filter\":{\"title\":\"条件搜索111\",\"visibleOn\":\"@meta.acl.search\",\"submitText\":\"\",\"controls\":[{\"type\":\"text\",\"name\":\"queryValue\",\"placeholder\":\"搜索提示\",\"addOn\":{\"label\":\"搜索\",\"type\":\"submit\"}}]},\"filterTogglable\":true,\"headerToolbar\":[{\"type\":\"button\",\"actionType\":\"drawer\",\"label\":\"新增\",\"icon\":\"fa fa-plus pull-left\",\"primary\":true,\"visibleOn\":\"@meta.acl.add\",\"drawer\":{\"title\":\"新增\",\"position\":\"left\",\"size\":\"lg\",\"resizable\":true,\"body\":{\"type\":\"form\",\"name\":\"sample-edit-form\",\"api\":\"@meta.api.create\",\"controls\":\"@meta.scene.create\"}}},{\"type\":\"columns-toggler\",\"align\":\"right\"},{\"type\":\"pagination\",\"align\":\"right\"},{\"type\":\"filter-toggler\",\"align\":\"right\"}],\"footerToolbar\":[\"statistics\",\"switch-per-page\",\"pagination\"],\"columns\":[\"@meta.scene.list|@expand\",{\"type\":\"operation\",\"label\":\"操作\",\"width\":200,\"toggled\":true,\"visibleOn\":\"@meta.acl.operation\",\"buttons\":[{\"type\":\"button\",\"icon\":\"fa fa-pencil\",\"tooltip\":\"编辑\",\"actionType\":\"drawer\",\"visibleOn\":\"@meta.acl.update\",\"drawer\":{\"position\":\"left\",\"size\":\"lg\",\"title\":\"编辑\",\"resizable\":true,\"body\":{\"type\":\"form\",\"name\":\"sample-edit-form\",\"api\":\"@meta.api.update\",\"controls\":\"@meta.scene.update\"}}},{\"type\":\"button\",\"icon\":\"fa fa-times text-danger\",\"actionType\":\"ajax\",\"tooltip\":\"删除\",\"confirmText\":\"您确认要删除?\",\"visibleOn\":\"@meta.acl.delete\",\"api\":\"@meta.api.delete\"}]}]}}"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "html",
+                            "html": "<h4>3. 最终合并后的页面源码如下</h4>"
+                        },
+                        {
+                            "title": "",
+                            "type": "form",
+                            "autoFocus": false,
+                            "submitText": null,
+                            "actions": [],
+                            "controls": [
+                                {
+                                    "type": "json-editor",
+                                    "value": "{\"$schema\":\"http://amis.baidu.com/v2/schemas/page.json#\",\"type\":\"page\",\"title\":\"默认标题1\",\"body\":{\"name\":\"crud-manage-table\",\"type\":\"crud\",\"draggable\":false,\"pageField\":\"current\",\"perPageField\":\"pageSize\",\"syncLocation\":false,\"api\":{\"data\":{\"&\":\"$$\"},\"headers\":{\"Authorization\":\"${_authorization}\"},\"method\":\"get\",\"url\":\"${_page_schema_api|raw}/api/v1/tpl_mall.mock/simple_crud_table_tpl/query\"},\"keepItemSelectionOnPageChange\":true,\"filter\":{\"title\":\"条件搜索111\",\"visibleOn\":\"acl.can('*')\",\"submitText\":\"\",\"controls\":[{\"type\":\"text\",\"name\":\"queryValue\",\"placeholder\":\"搜索提示\",\"addOn\":{\"label\":\"搜索\",\"type\":\"submit\"}}]},\"filterTogglable\":true,\"headerToolbar\":[{\"type\":\"button\",\"actionType\":\"drawer\",\"label\":\"新增\",\"icon\":\"fa fa-plus pull-left\",\"primary\":true,\"visibleOn\":\"acl.can('*')\",\"drawer\":{\"title\":\"新增\",\"position\":\"left\",\"size\":\"lg\",\"resizable\":true,\"body\":{\"type\":\"form\",\"name\":\"sample-edit-form\",\"api\":{\"headers\":{\"Authorization\":\"${_authorization}\"},\"method\":\"post\",\"url\":\"${_page_schema_api|raw}/api/v1/tpl_mall.mock/simple_crud_table_tpl/add\"},\"controls\":[{\"label\":\"用户名\",\"name\":\"user_name\",\"required\":true,\"sortable\":true,\"type\":\"text\"},{\"label\":\"密码\",\"name\":\"password\",\"required\":true,\"sortable\":true,\"type\":\"password\"},{\"label\":\"真实姓名\",\"name\":\"real_name\",\"required\":true,\"sortable\":true,\"type\":\"text\"},{\"inline\":true,\"label\":\"用户状态\",\"map\":{\"1\":\"<span class='label label-success'>启用</span>\",\"2\":\"<span class='label label-danger'>禁用</span>\"},\"name\":\"status\",\"options\":[{\"label\":\"正常\",\"value\":1},{\"label\":\"停用\",\"value\":2}],\"required\":true,\"sortable\":true,\"toggled\":true,\"type\":\"radios\",\"value\":1},{\"label\":\"邮箱\",\"name\":\"email\",\"sortable\":true,\"toggled\":true,\"type\":\"text\"},{\"label\":\"手机号\",\"name\":\"phone\",\"sortable\":true,\"toggled\":true,\"type\":\"text\"}]}}},{\"type\":\"columns-toggler\",\"align\":\"right\"},{\"type\":\"pagination\",\"align\":\"right\"},{\"type\":\"filter-toggler\",\"align\":\"right\"}],\"footerToolbar\":[\"statistics\",\"switch-per-page\",\"pagination\"],\"columns\":[{\"label\":\"用户名\",\"name\":\"user_name\",\"sortable\":true,\"type\":\"text\"},{\"label\":\"真实姓名\",\"name\":\"real_name\",\"sortable\":true,\"type\":\"text\"},{\"label\":\"用户状态\",\"map\":{\"1\":\"<span class='label label-success'>启用</span>\",\"2\":\"<span class='label label-danger'>禁用</span>\"},\"name\":\"status\",\"sortable\":true,\"toggled\":true,\"type\":\"mapping\"},{\"label\":\"邮箱\",\"name\":\"email\",\"sortable\":true,\"toggled\":true,\"type\":\"text\"},{\"label\":\"手机号\",\"name\":\"phone\",\"sortable\":true,\"toggled\":true,\"type\":\"text\"},{\"format\":\"YYYY-MM-DD hh:mm:ss\",\"label\":\"创建时间\",\"name\":\"created_at\",\"sortable\":true,\"toggled\":true,\"type\":\"date\"},{\"type\":\"operation\",\"label\":\"操作\",\"width\":200,\"toggled\":true,\"visibleOn\":\"acl.can('*')\",\"buttons\":[{\"type\":\"button\",\"icon\":\"fa fa-pencil\",\"tooltip\":\"编辑\",\"actionType\":\"drawer\",\"visibleOn\":\"acl.can('*')\",\"drawer\":{\"position\":\"left\",\"size\":\"lg\",\"title\":\"编辑\",\"resizable\":true,\"body\":{\"type\":\"form\",\"name\":\"sample-edit-form\",\"api\":{\"headers\":{\"Authorization\":\"${_authorization}\"},\"method\":\"put\",\"url\":\"${_page_schema_api|raw}/api/v1/tpl_mall.mock/simple_crud_table_tpl/edit/$id\"},\"controls\":[{\"label\":\"用户名\",\"name\":\"user_name\",\"required\":true,\"sortable\":true,\"type\":\"text\"},{\"label\":\"密码\",\"name\":\"password\",\"sortable\":true,\"type\":\"password\"},{\"label\":\"真实姓名\",\"name\":\"real_name\",\"required\":true,\"sortable\":true,\"type\":\"text\"},{\"inline\":true,\"label\":\"用户状态\",\"map\":{\"1\":\"<span class='label label-success'>启用</span>\",\"2\":\"<span class='label label-danger'>禁用</span>\"},\"name\":\"status\",\"options\":[{\"label\":\"正常\",\"value\":1},{\"label\":\"停用\",\"value\":2}],\"required\":true,\"sortable\":true,\"toggled\":true,\"type\":\"radios\",\"value\":1},{\"label\":\"邮箱\",\"name\":\"email\",\"sortable\":true,\"toggled\":true,\"type\":\"text\"},{\"label\":\"手机号\",\"name\":\"phone\",\"sortable\":true,\"toggled\":true,\"type\":\"text\"}]}}},{\"type\":\"button\",\"icon\":\"fa fa-times text-danger\",\"actionType\":\"ajax\",\"tooltip\":\"删除\",\"confirmText\":\"您确认要删除?\",\"visibleOn\":\"acl.can('*')\",\"api\":{\"headers\":{\"Authorization\":\"${_authorization}\"},\"method\":\"delete\",\"url\":\"${_page_schema_api|raw}/api/v1/tpl_mall.mock/simple_crud_table_tpl/delete/$id\"}}]}]}}"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
                     "title": "接口数据格式",
                     "tab": [
                         {
@@ -1660,15 +1776,15 @@
             "perPageField": "pageSize",
             "syncLocation": false,
             "api": {
-              "url": "${_page_schema_api|raw}/api/v1/page_manager",
-              "method": "get",
-              "headers": {
-                "Authorization": "${_authorization}"
-              },
-              "data": {
-                "&": "$$"
-              },
-              "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;}return payload;}"
+                "url": "${_page_schema_api|raw}/api/v1/page_manager",
+                "method": "get",
+                "headers": {
+                    "Authorization": "${_authorization}"
+                },
+                "data": {
+                    "&": "$$"
+                },
+                "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;}return payload;}"
             },
             "keepItemSelectionOnPageChange": true,
             "filter": {
@@ -1708,7 +1824,7 @@
                                 "url": "${_page_schema_api|raw}/api/v1/page_manager",
                                 "method": "post",
                                 "headers": {
-                                  "Authorization": "${_authorization}"
+                                    "Authorization": "${_authorization}"
                                 },
                                 "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};payload.status=0;payload.msg='ok';}return payload;}"
                             },
@@ -1728,13 +1844,41 @@
                                     "placeholder": "/myapp/hello"
                                 },
                                 {
-                                    "type": "editor",
-                                    "name": "source",
-                                    "label": "页面源码",
-                                    "language": "json",
-                                    "className": "h-full",
-                                    "size": "xxl",
-                                    "required": true
+                                    "type": "tabs",
+                                    "tabs": [
+                                        {
+                                            "title": "页面元信息",
+                                            "controls": [
+                                                {
+                                                    "type": "alert",
+                                                    "body": "<p>定义页面中动态的元素，在页面中通过带<code>@</code>前缀的jsonpath格式路径可以引用到相关内容并替换,此功能非必须并可为空,也可以直接在页面源码中使用原始的amis语法</p>",
+                                                    "level": "info"
+                                                },
+                                                {
+                                                    "type": "editor",
+                                                    "name": "meta",
+                                                    "label": "页面元信息",
+                                                    "language": "json",
+                                                    "className": "h-full",
+                                                    "size": "xxl"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "title": "页面源码",
+                                            "controls": [
+                                                {
+                                                    "type": "editor",
+                                                    "name": "source",
+                                                    "label": "页面源码",
+                                                    "language": "json",
+                                                    "className": "h-full",
+                                                    "size": "xxl",
+                                                    "required": true
+                                                }
+                                            ]
+                                        }
+                                    ]
                                 }
                             ]
                         }
@@ -1756,8 +1900,8 @@
                     "align": "right"
                 },
                 {
-                  "type": "filter-toggler",
-                  "align": "right"
+                    "type": "filter-toggler",
+                    "align": "right"
                 }
             ],
             "footerToolbar": [
@@ -1794,13 +1938,13 @@
                     "type": "text",
                     "toggled": true
                 },
-               {
-                   "name": "create_time",
-                   "label": "创建时间",
-                   "sortable": true,
-                   "type": "date",
-                   "format": "YYYY-MM-DD hh:mm:ss",
-                   "toggled": true
+                {
+                    "name": "create_time",
+                    "label": "创建时间",
+                    "sortable": true,
+                    "type": "date",
+                    "format": "YYYY-MM-DD hh:mm:ss",
+                    "toggled": true
                 },
                 {
                     "type": "operation",
@@ -1815,29 +1959,28 @@
                             "tooltip": "克隆当前页",
                             "visibleOn": "acl.can('/tools/page_manager::clone')",
                             "api": {
-                               "url": "${_page_schema_api|raw}/api/v1/page_manager/$id",
-                               "method": "post",
-                               "headers": {
-                                 "Authorization": "${_authorization}"
-                               },
-                               "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};payload.status=0;payload.msg='ok'; }return payload;}"
+                                "url": "${_page_schema_api|raw}/api/v1/page_manager/$id",
+                                "method": "post",
+                                "headers": {
+                                    "Authorization": "${_authorization}"
+                                },
+                                "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};payload.status=0;payload.msg='ok'; }return payload;}"
                             },
                             "reload": "page-manage-table"
                         },
                         {
                             "type": "button",
                             "icon": "fa fa-eye",
-                            "actionType": "ajax",
+                            "actionType": "dialog",
                             "tooltip": "版本预览",
                             "visibleOn": "acl.can('/tools/page_manager::preview')",
-                            "actionType": "dialog",
                             "dialog": {
                                 "disabled": true,
                                 "size": "full",
                                 "title": "版本预览",
                                 "body": {
-                                   "type": "iframe",
-                                   "src": "/page/preview.html?id=$id"
+                                    "type": "iframe",
+                                    "src": "/page/preview.html?id=$id"
                                 }
                             }
                         },
@@ -1856,12 +1999,12 @@
                                     "type": "form",
                                     "name": "sample-edit-form",
                                     "api": {
-                                       "url": "${_page_schema_api|raw}/api/v1/page_manager/$id",
-                                       "method": "put",
-                                       "headers": {
-                                         "Authorization": "${_authorization}"
-                                       },
-                                       "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};payload.status=0;payload.msg='ok'; }return payload;}"
+                                        "url": "${_page_schema_api|raw}/api/v1/page_manager/$id",
+                                        "method": "put",
+                                        "headers": {
+                                            "Authorization": "${_authorization}"
+                                        },
+                                        "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};payload.status=0;payload.msg='ok'; }return payload;}"
                                     },
                                     "controls": [
                                         {
@@ -1878,13 +2021,56 @@
                                             "required": true
                                         },
                                         {
-                                            "type": "editor",
-                                            "name": "source",
-                                            "label": "页面源码",
-                                            "language": "json",
-                                            "className": "h-full",
-                                            "size": "xxl",
-                                            "required": true
+                                            "type": "tabs",
+                                            "tabs": [
+                                                {
+                                                    "title": "页面元信息",
+                                                    "controls": [
+                                                        {
+                                                            "type": "alert",
+                                                            "body": "<p>定义页面中动态的元素，在页面中通过带<code>@</code>前缀的jsonpath格式路径可以引用到相关内容并替换,此功能非必须并可为空,也可以直接在页面源码中使用原始的amis语法</p>",
+                                                            "level": "info"
+                                                        },
+                                                        {
+                                                            "type": "editor",
+                                                            "name": "meta",
+                                                            "label": "页面元信息",
+                                                            "language": "json",
+                                                            "className": "h-full",
+                                                            "size": "xxl"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "title": "页面源码",
+                                                    "controls": [
+                                                        {
+                                                            "type": "editor",
+                                                            "name": "source",
+                                                            "label": "页面源码",
+                                                            "language": "json",
+                                                            "className": "h-full",
+                                                            "size": "xxl",
+                                                            "required": true
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "title": "合并后页面源码(页面元信息+页面源码)",
+                                                    "controls": [
+                                                        {
+                                                            "type": "editor",
+                                                            "disabled":true,
+
+                                                            "name": "render_source",
+                                                            "label": "合并后页面源码(页面元信息+页面源码)",
+                                                            "language": "json",
+                                                            "className": "h-full editor-full",
+                                                            "size": "xxl"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
                                         }
                                     ]
                                 }
@@ -1898,6 +2084,7 @@
                             "visibleOn": "acl.can('/tools/page_manager::history-preview')",
                             "dialog": {
                                 "title": "历史版本",
+                                "className": "history-version-modal",
                                 "size": "md",
                                 "name": "page-history",
                                 "body": {
@@ -1907,14 +2094,14 @@
                                     "perPageField": "pageSize",
                                     "syncLocation": false,
                                     "api": {
-                                       "url": "${_page_schema_api|raw}/api/v1/page_manager/$id/history",
-                                       "method": "get",
-                                       "headers": {
-                                         "Authorization": "${_authorization}"
-                                       },
-                                       "data": {
-                                         "&": "$$"
-                                       }
+                                        "url": "${_page_schema_api|raw}/api/v1/page_manager/$id/history",
+                                        "method": "get",
+                                        "headers": {
+                                            "Authorization": "${_authorization}"
+                                        },
+                                        "data": {
+                                            "&": "$$"
+                                        }
                                     },
                                     "keepItemSelectionOnPageChange": true,
                                     "filterTogglable": true,
@@ -1958,12 +2145,12 @@
                                             "toggled": true
                                         },
                                         {
-                                                "name": "history_create_time",
-                                                "label": "创建时间",
-                                                "sortable": true,
-                                                "type": "date",
-                                                "format": "YYYY-MM-DD hh:mm:ss",
-                                                "toggled": true
+                                            "name": "history_create_time",
+                                            "label": "创建时间",
+                                            "sortable": true,
+                                            "type": "date",
+                                            "format": "YYYY-MM-DD hh:mm:ss",
+                                            "toggled": true
                                         },
                                         {
                                             "type": "operation",
@@ -1973,16 +2160,15 @@
                                                 {
                                                     "type": "button",
                                                     "icon": "fa fa-eye",
-                                                    "actionType": "ajax",
-                                                    "tooltip": "版本预览",
                                                     "actionType": "dialog",
+                                                    "tooltip": "版本预览",
                                                     "dialog": {
                                                         "disabled": true,
                                                         "size": "full",
                                                         "title": "版本预览",
                                                         "body": {
-                                                           "type": "iframe",
-                                                           "src": "/page/preview.html?type=history&id=$id"
+                                                            "type": "iframe",
+                                                            "src": "/page/preview.html?type=history&id=$id"
                                                         }
                                                     }
                                                 },
@@ -1993,11 +2179,14 @@
                                                     "tooltip": "回滚到此版本",
                                                     "confirmText": "您确认要回滚到此版本吗?",
                                                     "api": {
-                                                       "url": "${_page_schema_api|raw}/api/v1/page_manager/$id/source",
-                                                       "method": "patch",
-                                                       "headers": {
-                                                         "Authorization": "${_authorization}"
-                                                       }
+                                                        "url": "${_page_schema_api|raw}/api/v1/page_manager/$id/source",
+                                                        "method": "patch",
+                                                        "headers": {
+                                                            "Authorization": "${_authorization}"
+                                                        },
+                                                        "data": {
+                                                            "&": "$$"
+                                                        }
                                                     },
                                                     "redirect": "/#/tools/page_manager"
                                                 }
@@ -2020,10 +2209,10 @@
                                 "position": "left",
                                 "size": "lg",
                                 "data": {
-                                  "&": "$$",
-                                  "router":"${identify|raw}",
-                                  "_page_schema_api":"${_page_schema_api|raw}",
-                                  "_authorization":"${_authorization}"
+                                    "&": "$$",
+                                    "router": "${identify|raw}",
+                                    "_page_schema_api": "${_page_schema_api|raw}",
+                                    "_authorization": "${_authorization}"
                                 },
                                 "body": {
                                     "type": "form",
@@ -2056,7 +2245,7 @@
                                                 "url": "${_page_schema_api|raw}/api/v1/menus.tree",
                                                 "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};var list=payload.list;var newList=[];for(var i in list){var item=list[i];item.label=item.name;item.value=item.id;if(item.children!=undefined){for(var j in item.children){var childrenItem=item.children[j];item.children[j].label=childrenItem.name;item.children[j].value=childrenItem.id}}newList.push(item)};payload.data.options = newList;payload.status=0;payload.msg='ok'; }return payload;}",
                                                 "headers": {
-                                                   "Authorization": "${_authorization}"
+                                                    "Authorization": "${_authorization}"
                                                 }
                                             }
                                         },
@@ -2206,12 +2395,12 @@
                             "confirmText": "您确认要删除?",
                             "visibleOn": "acl.can('/tools/page_manager::del')",
                             "api": {
-                               "url": "${_page_schema_api|raw}/api/v1/page_manager/$id",
-                               "method": "delete",
-                               "headers": {
-                                 "Authorization": "${_authorization}"
-                               },
-                               "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};payload.status=0;payload.msg='ok'; }return payload;}"
+                                "url": "${_page_schema_api|raw}/api/v1/page_manager/$id",
+                                "method": "delete",
+                                "headers": {
+                                    "Authorization": "${_authorization}"
+                                },
+                                "adaptor": "{if (payload.error != undefined){payload.data = {};payload.status=payload.error.code;payload.msg=payload.error.message;} else { payload.data = {};payload.status=0;payload.msg='ok'; }return payload;}"
                             }
                         }
                     ],
@@ -2220,8 +2409,6 @@
             ]
         }
     }
-
-
 - name: "示例页面"
   identify: "/pages/example"
   source: |
@@ -2944,7 +3131,7 @@
                                             "controls": [
                                                 {
                                                     "type": "alert",
-                                                    "body": "<p>浏览器可以使用<code>${_page_schema_api}/api/v1/tpl_mall.mock/mock/${identify| default: <模板标识>}/&ltpath&gt;</code>访问调试</p><p>页面源码可以使用<code>\\${_page_schema_api}/api/v1/tpl_mall.mock/mock/${identify| default: <模板标识>}/&ltpath&gt;</code>调用访问</p>",
+                                                    "body": "<p>浏览器可以使用<code>${_page_schema_api}/api/v1/tpl_mall/mock/${identify| default: <模板标识>}/&ltpath&gt;</code>访问调试</p><p>页面源码可以使用<code>\\${_page_schema_api}/api/v1/tpl_mall/mock/${identify| default: <模板标识>}/&ltpath&gt;</code> 调用访问</p>",
                                                     "level": "info"
                                                 },
                                                 {
@@ -3038,13 +3225,41 @@
                                         "placeholder": "/myapp/hello"
                                     },
                                     {
-                                        "type": "editor",
-                                        "name": "source",
-                                        "label": "页面源码",
-                                        "language": "json",
-                                        "className": "h-full",
-                                        "size": "xxl",
-                                        "required": true
+                                        "type": "tabs",
+                                        "tabs": [
+                                            {
+                                                "title": "页面元信息",
+                                                "controls": [
+                                                    {
+                                                        "type": "alert",
+                                                        "body": "<p>定义页面中动态的元素，在页面中通过带<code>@meta.</code>前缀的jsonpath格式路径可以引用到相关内容并替换,此功能非必须并可为空,也可以直接在页面源码中使用原始的amis语法</p>",
+                                                        "level": "info"
+                                                    },
+                                                    {
+                                                        "type": "editor",
+                                                        "name": "meta",
+                                                        "label": "页面元信息",
+                                                        "language": "json",
+                                                        "className": "h-full",
+                                                        "size": "xxl"
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "title": "页面源码",
+                                                "controls": [
+                                                    {
+                                                        "type": "editor",
+                                                        "name": "source",
+                                                        "label": "页面源码",
+                                                        "language": "json",
+                                                        "className": "h-full",
+                                                        "size": "xxl",
+                                                        "required": true
+                                                    }
+                                                ]
+                                            }
+                                        ]
                                     }
                                 ]
                             }
@@ -3158,6 +3373,25 @@
                                         ],
                                         "tabs": [
                                             {
+                                                "title": "页面元信息",
+                                                "controls": [
+                                                    {
+                                                        "type": "alert",
+                                                        "body": "<p>定义页面中动态的元素，在页面中通过带<code>@meta.</code>前缀的jsonpath格式路径可以引用到相关内容并替换</p>",
+                                                        "level": "info"
+                                                    },
+                                                    {
+                                                        "type": "editor",
+                                                        "name": "meta",
+                                                        "label": "页面元信息",
+                                                        "language": "json",
+                                                        "className": "h-full",
+                                                        "size": "xxl",
+                                                        "required": true
+                                                    }
+                                                ]
+                                            },
+                                            {
                                                 "title": "页面源码",
                                                 "controls": [
                                                     {
@@ -3176,7 +3410,7 @@
                                                 "controls": [
                                                     {
                                                         "type": "alert",
-                                                        "body": "<p>浏览器可以使用<code>${_page_schema_api}/api/v1/tpl_mall.mock/mock/${identify| default: <模板标识>}/&ltpath&gt;</code>访问调试</p><p>页面源码可以使用<code>\\${_page_schema_api}/api/v1/tpl_mall.mock/mock/${identify| default: <模板标识>}/&ltpath&gt;</code>调用访问</p>",
+                                                        "body": "<p>浏览器可以使用<code>${_page_schema_api}/api/v1/tpl_mall/mock/${identify| default: <模板标识>}/&ltpath&gt;</code>访问调试</p><p>页面源码可以使用<code>\\${_page_schema_api}/api/v1/tpl_mall/mock/${identify| default: <模板标识>}/&ltpath&gt;</code> 调用访问</p>",
                                                         "level": "info"
                                                     },
                                                     {

@@ -5,19 +5,20 @@
   icon: "fa fa-table"
   name: "简单的crud模板"
   desc: "带查询功能的增删查改表格模板"
-  source: |
+  meta: |
     {
-        "$schema": "http://amis.baidu.com/v2/schemas/page.json#",
-        "type": "page",
-        "title": "默认标题",
-        "body": {
-            "name": "crud-manage-table",
-            "type": "crud",
-            "draggable": false,
-            "pageField": "current",
-            "perPageField": "pageSize",
-            "syncLocation": false,
-            "api": {
+        "base": {
+            "title": "默认标题"
+        },
+        "acl": {
+            "search": "acl.can('*')",
+            "add": "acl.can('*')",
+            "operation": "acl.can('*')",
+            "update": "acl.can('*')",
+            "delete": "acl.can('*')"
+        },
+        "api": {
+            "query": {
                 "url": "${_page_schema_api|raw}/api/v1/tpl_mall.mock/simple_crud_table_tpl/query",
                 "method": "get",
                 "headers": {
@@ -27,10 +28,137 @@
                     "&": "$$"
                 }
             },
+            "create": {
+                "url": "${_page_schema_api|raw}/api/v1/tpl_mall.mock/simple_crud_table_tpl/add",
+                "method": "post",
+                "headers": {
+                    "Authorization": "${_authorization}"
+                }
+            },
+            "update": {
+                "url": "${_page_schema_api|raw}/api/v1/tpl_mall.mock/simple_crud_table_tpl/edit/$id",
+                "method": "put",
+                "headers": {
+                    "Authorization": "${_authorization}"
+                }
+            },
+            "delete": {
+                "url": "${_page_schema_api|raw}/api/v1/tpl_mall.mock/simple_crud_table_tpl/delete/$id",
+                "method": "delete",
+                "headers": {
+                    "Authorization": "${_authorization}"
+                }
+            }
+        },
+        "fields": {
+            "user_name": {
+                "name": "user_name",
+                "label": "用户名",
+                "sortable": true,
+                "type": "text",
+                "@create|@update": {
+                    "required": true
+                },
+                "@list": {}
+            },
+            "password": {
+                "name": "password",
+                "label": "密码",
+                "sortable": true,
+                "type": "password",
+                "@create": {
+                    "required": true
+                },
+                "@update": {}
+            },
+            "real_name": {
+                "name": "real_name",
+                "label": "真实姓名",
+                "sortable": true,
+                "type": "text",
+                "@create|@update": {
+                    "required": true
+                },
+                "@list": {}
+            },
+            "status": {
+                "name": "status",
+                "label": "用户状态",
+                "sortable": true,
+                "type": "mapping",
+                "toggled": true,
+                "map": {
+                    "1": "<span class='label label-success'>启用</span>",
+                    "2": "<span class='label label-danger'>禁用</span>"
+                },
+                "@create|@update": {
+                    "-map": true,
+                    "-toggled": true,
+                    "type": "radios",
+                    "name": "status",
+                    "label": "用户状态",
+                    "inline": true,
+                    "value": 1,
+                    "required": true,
+                    "options": [
+                        {
+                            "label": "正常",
+                            "value": 1
+                        },
+                        {
+                            "label": "停用",
+                            "value": 2
+                        }
+                    ]
+                },
+                "@list": {}
+            },
+            "email": {
+                "name": "email",
+                "label": "邮箱",
+                "sortable": true,
+                "type": "text",
+                "toggled": true,
+                "@list": {},
+                "@create|@update": {}
+            },
+            "phone": {
+                "name": "phone",
+                "label": "手机号",
+                "sortable": true,
+                "type": "text",
+                "toggled": true,
+                "@list": {},
+                "@create|@update": {}
+            },
+            "created_at": {
+                "name": "created_at",
+                "label": "创建时间",
+                "sortable": true,
+                "type": "date",
+                "format": "YYYY-MM-DD hh:mm:ss",
+                "toggled": true,
+                "@list": {}
+            }
+        }
+    }
+  source: |
+    {
+        "$schema": "http://amis.baidu.com/v2/schemas/page.json#",
+        "type": "page",
+        "title": "@meta.base.title",
+        "body": {
+            "name": "crud-manage-table",
+            "type": "crud",
+            "draggable": false,
+            "pageField": "current",
+            "perPageField": "pageSize",
+            "syncLocation": false,
+            "api": "@meta.api.query",
             "keepItemSelectionOnPageChange": true,
             "filter": {
                 "title": "条件搜索",
-                "visibleOn": "acl.can('/tools/tpl_mall:query')",
+                "visibleOn": "@meta.acl.search",
                 "submitText": "",
                 "controls": [
                     {
@@ -52,7 +180,7 @@
                     "label": "新增",
                     "icon": "fa fa-plus pull-left",
                     "primary": true,
-                    "visibleOn": "acl.can('/tools/tpl_mall:add')",
+                    "visibleOn": "@meta.acl.add",
                     "drawer": {
                         "title": "新增",
                         "position": "left",
@@ -61,67 +189,8 @@
                         "body": {
                             "type": "form",
                             "name": "sample-edit-form",
-                            "api": {
-                                "url": "${_page_schema_api|raw}/api/v1/tpl_mall.mock/simple_crud_table_tpl/add",
-                                "method": "post",
-                                "headers": {
-                                    "Authorization": "${_authorization}"
-                                }
-                            },
-                            "controls": [
-                                {
-                                    "name": "user_name",
-                                    "label": "用户名",
-                                    "sortable": true,
-                                    "type": "text",
-                                    "required": true
-                                },
-                                {
-                                    "name": "password",
-                                    "label": "密码",
-                                    "sortable": true,
-                                    "type": "password",
-                                    "required": true
-                                },
-                                {
-                                    "name": "real_name",
-                                    "label": "真实姓名",
-                                    "sortable": true,
-                                    "type": "text",
-                                    "required": true
-                                },
-                                {
-                                    "type": "radios",
-                                    "name": "status",
-                                    "label": "用户状态",
-                                    "inline": true,
-                                    "value": 1,
-                                    "options": [
-                                        {
-                                            "label": "正常",
-                                            "value": 1
-                                        },
-                                        {
-                                            "label": "停用",
-                                            "value": 2
-                                        }
-                                    ]
-                                },
-                                {
-                                    "name": "email",
-                                    "label": "邮箱",
-                                    "sortable": true,
-                                    "type": "text",
-                                    "toggled": true
-                                },
-                                {
-                                    "name": "phone",
-                                    "label": "手机号",
-                                    "sortable": true,
-                                    "type": "text",
-                                    "toggled": true
-                                }
-                            ]
+                            "api": "@meta.api.create",
+                            "controls": "@meta.scene.create"
                         }
                     }
                 },
@@ -144,63 +213,20 @@
                 "pagination"
             ],
             "columns": [
-                {
-                    "name": "user_name",
-                    "label": "用户名",
-                    "sortable": true,
-                    "type": "text"
-                },
-                {
-                    "name": "real_name",
-                    "label": "真实姓名",
-                    "sortable": true,
-                    "type": "text"
-                },
-                {
-                    "name": "status",
-                    "label": "用户状态",
-                    "sortable": true,
-                    "type": "mapping",
-                    "toggled": true,
-                    "map": {
-                        "1": "<span class='label label-success'>启用</span>",
-                        "2": "<span class='label label-danger'>禁用</span>"
-                    }
-                },
-                {
-                    "name": "email",
-                    "label": "邮箱",
-                    "sortable": true,
-                    "type": "text",
-                    "toggled": true
-                },
-                {
-                    "name": "phone",
-                    "label": "手机号",
-                    "sortable": true,
-                    "type": "text",
-                    "toggled": true
-                },
-                {
-                    "name": "created_at",
-                    "label": "创建时间",
-                    "sortable": true,
-                    "type": "date",
-                    "format": "YYYY-MM-DD hh:mm:ss",
-                    "toggled": true
-                },
+                "@meta.scene.list|@expand",
                 {
                     "type": "operation",
                     "label": "操作",
                     "width": 200,
-                    "visibleOn": "acl.can('/tools/tpl_mall:edit', '/tools/tpl_mall:delete')",
+                    "toggled": true,
+                    "visibleOn": "@meta.acl.operation",
                     "buttons": [
                         {
                             "type": "button",
                             "icon": "fa fa-pencil",
                             "tooltip": "编辑",
                             "actionType": "drawer",
-                            "visibleOn": "acl.can('/tools/tpl_mall:edit')",
+                            "visibleOn": "@meta.acl.update",
                             "drawer": {
                                 "position": "left",
                                 "size": "lg",
@@ -209,67 +235,8 @@
                                 "body": {
                                     "type": "form",
                                     "name": "sample-edit-form",
-                                    "api": {
-                                        "url": "${_page_schema_api|raw}/api/v1/tpl_mall.mock/simple_crud_table_tpl/edit/$id",
-                                        "method": "put",
-                                        "headers": {
-                                            "Authorization": "${_authorization}"
-                                        }
-                                    },
-                                    "controls": [
-                                        {
-                                            "name": "user_name",
-                                            "label": "用户名",
-                                            "sortable": true,
-                                            "type": "text",
-                                            "required": true
-                                        },
-                                        {
-                                            "name": "password",
-                                            "label": "密码",
-                                            "sortable": true,
-                                            "type": "password",
-                                            "placeholder": "留空则不修改登录密码"
-                                        },
-                                        {
-                                            "name": "real_name",
-                                            "label": "真实姓名",
-                                            "sortable": true,
-                                            "type": "text",
-                                            "required": true
-                                        },
-                                        {
-                                            "type": "radios",
-                                            "name": "status",
-                                            "label": "用户状态",
-                                            "inline": true,
-                                            "value": 1,
-                                            "options": [
-                                                {
-                                                    "label": "正常",
-                                                    "value": 1
-                                                },
-                                                {
-                                                    "label": "停用",
-                                                    "value": 2
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "name": "email",
-                                            "label": "邮箱",
-                                            "sortable": true,
-                                            "type": "text",
-                                            "toggled": true
-                                        },
-                                        {
-                                            "name": "phone",
-                                            "label": "手机号",
-                                            "sortable": true,
-                                            "type": "text",
-                                            "toggled": true
-                                        }
-                                    ]
+                                    "api": "@meta.api.update",
+                                    "controls": "@meta.scene.update"
                                 }
                             }
                         },
@@ -279,17 +246,10 @@
                             "actionType": "ajax",
                             "tooltip": "删除",
                             "confirmText": "您确认要删除?",
-                            "visibleOn": "acl.can('/tools/tpl_mall:delete')",
-                            "api": {
-                                "url": "${_page_schema_api|raw}/api/v1/tpl_mall.mock/simple_crud_table_tpl/delete/$id",
-                                "method": "delete",
-                                "headers": {
-                                    "Authorization": "${_authorization}"
-                                }
-                            }
+                            "visibleOn": "@meta.acl.delete",
+                            "api": "@meta.api.delete"
                         }
-                    ],
-                    "toggled": true
+                    ]
                 }
             ]
         }

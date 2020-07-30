@@ -2,6 +2,8 @@ package bll
 
 import (
 	"context"
+	"encoding/json"
+	"github.com/tanjiancheng/gin-amis-admin/internal/app/iutil"
 	"github.com/tanjiancheng/gin-amis-admin/pkg/util"
 	"os"
 	"regexp"
@@ -64,6 +66,7 @@ func (a *GTplMall) createTplMalls(ctx context.Context, list schema.GTplMalls) er
 				Identify:   item.Identify,
 				Name:       item.Name,
 				Desc:       item.Desc,
+				Meta:       item.Meta,
 				Source:     item.Source,
 				Status:     item.Status,
 				Creator:    "root",
@@ -104,6 +107,12 @@ func (a *GTplMall) Check(ctx context.Context, appId string) error {
 // Get 查询指定数据
 func (a *GTplMall) Get(ctx context.Context, id string, opts ...schema.GTplMallQueryOptions) (*schema.GTplMall, error) {
 	item, err := a.GTplMallModel.Get(ctx, id, opts...)
+	meta := item.Meta
+	source := item.Source
+	jsonPathx := new(iutil.JsonPathx)
+	item.Source, err = jsonPathx.Search(meta, source)
+	_ = json.Unmarshal([]byte(item.Source), &item.SourceFormat)
+	_ = json.Unmarshal([]byte(item.Meta), &item.MetaFormat)
 	if err != nil {
 		return nil, err
 	} else if item == nil {

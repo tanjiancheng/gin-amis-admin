@@ -56,7 +56,7 @@ func (a *PageManager) GetByRoute(c *gin.Context) {
 		ginplus.ResCustomError(c, err)
 		return
 	}
-	source := item.Source
+	source := item.RenderSource
 	sourceMap := make(map[string]interface{})
 	err = json.Unmarshal([]byte(source), &sourceMap)
 	if err != nil {

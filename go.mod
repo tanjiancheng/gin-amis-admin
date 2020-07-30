@@ -12,6 +12,7 @@ require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.0 // indirect
 	github.com/denisenkom/go-mssqldb v0.0.0-20200428022330-06a60b6afbbc // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/elliotchance/orderedmap v1.3.0
 	github.com/fatih/camelcase v1.0.0 // indirect
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
@@ -21,14 +22,15 @@ require (
 	github.com/go-openapi/swag v0.19.9 // indirect
 	github.com/go-redis/redis v6.15.7+incompatible
 	github.com/go-redis/redis_rate v6.5.0+incompatible
-	github.com/go-sql-driver/mysql v1.5.0 // indirect
 	github.com/golang/protobuf v1.4.1 // indirect
 	github.com/google/gops v0.3.8
 	github.com/google/uuid v1.1.1
 	github.com/google/wire v0.4.0
+	github.com/iancoleman/orderedmap v0.0.0-20190318233801-ac98e3ecb4b0
 	github.com/jinzhu/copier v0.0.0-20190924061706-b57f9002281a
 	github.com/jinzhu/gorm v1.9.14
 	github.com/jinzhu/now v1.1.1 // indirect
+	github.com/jmespath/go-jmespath v0.3.0
 	github.com/json-iterator/go v1.1.9
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
 	github.com/klauspost/compress v1.10.5 // indirect
@@ -49,16 +51,15 @@ require (
 	github.com/tidwall/gjson v1.6.0 // indirect
 	github.com/tidwall/pretty v1.0.1 // indirect
 	github.com/urfave/cli/v2 v2.2.0
+	github.com/virtuald/go-ordered-json v0.0.0-20170621173500-b18e6e673d74 // indirect
 	go.mongodb.org/mongo-driver v1.3.3
+	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
 	golang.org/x/net v0.0.0-20200506145744-7e3656a0809f // indirect
 	golang.org/x/sync v0.0.0-20200317015054-43a5402ce75a // indirect
 	golang.org/x/sys v0.0.0-20200509044756-6aff5f38e54f // indirect
+	golang.org/x/text v0.3.3 // indirect
 	golang.org/x/time v0.0.0-20200416051211-89c76fbcd5d1
 	golang.org/x/tools v0.0.0-20200511202723-1762287ae9dd // indirect
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 	gopkg.in/yaml.v2 v2.2.8
-	gorm.io/driver/mysql v0.3.0
-	gorm.io/driver/postgres v0.2.5
-	gorm.io/driver/sqlite v1.0.8
-	gorm.io/gorm v0.2.20
 )

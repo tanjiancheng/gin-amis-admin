@@ -16,6 +16,7 @@ type GTplMall struct {
 	Scope      string `gorm:"column:scope;size:256;index;not null;"`                     // 应用限制 *为所有使用，其他情况为具体的app_id下才能可见
 	Name       string `gorm:"column:name;size:128;index;default:'';not null;"`           // 模板名称
 	Desc       string `gorm:"column:desc;size:256;default:'';not null;"`                 // 模板说明
+	Meta       string `gorm:"column:meta;type:longtext;not null;"`                       // 页面元信息
 	Source     string `gorm:"column:source;type:longtext;not null;"`                     // 页面源码
 	MockData   string `gorm:"column:mock_data;type:longtext;not null;"`                  // mock接口数据
 	Icon       string `gorm:"column:icon;size:32;default:'';not null;"`                  // 模板图标

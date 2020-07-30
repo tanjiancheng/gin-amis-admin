@@ -2,9 +2,10 @@ package entity
 
 import (
 	"context"
+	"github.com/jinzhu/gorm"
+	"github.com/tanjiancheng/gin-amis-admin/internal/app/iutil"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/schema"
 	"github.com/tanjiancheng/gin-amis-admin/pkg/util"
-	"github.com/jinzhu/gorm"
 )
 
 // GetPageManagerDb 获取页面管理存储
@@ -27,6 +28,7 @@ type PageManager struct {
 	ID         int    `gorm:"column:id;primary_key;AUTO_INCREMENT"`                      // 自增ID
 	Identify   string `gorm:"unique_index;column:identify;size:64;default:'';not null;"` // 页面标识
 	Name       string `gorm:"column:name;size:64;default:'';not null;"`                  // 页面名称
+	Meta       string `gorm:"column:meta;type:longtext;not null;"`                       // 页面元信息
 	Source     string `gorm:"column:source;type:longtext;not null;"`                     // 页面源码
 	Creator    string `gorm:"column:creator;size:32;default:'';not null;"`               // 创建者
 	CreateTime int64  `gorm:"column:create_time;"`                                       // 创建时间
@@ -40,7 +42,11 @@ func (a PageManager) TableName() string {
 
 // ToSchemaPageManager 转换为页面管理对象
 func (a PageManager) ToSchemaPageManager() *schema.PageManager {
+	meta := a.Meta
+	source := a.Source
+	jsonPathx := new(iutil.JsonPathx)
 	item := new(schema.PageManager)
+	item.RenderSource, _ = jsonPathx.Search(meta, source)
 	util.StructMapToStruct(a, item)
 	return item
 }

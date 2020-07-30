@@ -16,9 +16,9 @@ html, body {
     padding: 8px;
 }
 
-/*.multi-modal .amis-scope .a-Modal {
+.history-version-modal {
     z-index: 1100 !important;
-}*/
+}
 
 .a-Modal--2th {
     z-index: 1400 !important;

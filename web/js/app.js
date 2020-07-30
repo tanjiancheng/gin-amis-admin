@@ -1,7 +1,7 @@
 // 来个闭包，免得污染全局变量。
 (function (require) {
     //当前权限actions
-    let permissionActions = [];
+    let permissionActions = ["*"];
     let setting = {};
     let menu = {};
 
@@ -422,6 +422,8 @@
                         return;
                     }
                     let source = response.data.source;
+                    let renderSource = response.data.render_source;
+                    let meta = response.data.meta;
                     let id = response.data.id;
                     let name = response.data.name;
                     let identify = response.data.identify;
@@ -474,12 +476,58 @@
                                                 "value": identify
                                             },
                                             {
-                                                "type": "json-editor",
-                                                "name": "source",
-                                                "label": false,
-                                                "size": "xxl",
-                                                "className": "h-full editor-full",
-                                                "value": source
+                                                "type": "tabs",
+                                                "tabs": [
+                                                    {
+                                                        "title": "页面元信息",
+                                                        "controls": [
+                                                            {
+                                                                "type": "alert",
+                                                                "body": "<p>定义页面中动态的元素，在页面中通过带<code>@meta.</code>前缀的jsonpath格式路径可以引用到相关内容并替换,此功能非必须并可为空,也可以直接在页面源码中使用原始的amis语法</p>",
+                                                                "level": "info"
+                                                            },
+                                                            {
+                                                                "type": "editor",
+                                                                "name": "meta",
+                                                                "label": "页面元信息",
+                                                                "language": "json",
+                                                                "className": "h-full editor-full",
+                                                                "size": "xxl",
+                                                                "value": meta,
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "title": "页面源码",
+                                                        "controls": [
+                                                            {
+                                                                "type": "editor",
+                                                                "name": "source",
+                                                                "label": "页面源码",
+                                                                "language": "json",
+                                                                "className": "h-full editor-full",
+                                                                "size": "xxl",
+                                                                "required": true,
+                                                                "value": source,
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "title": "合并后页面源码(页面元信息+页面源码)",
+                                                        "controls": [
+                                                            {
+                                                                "type": "editor",
+                                                                "disabled":true,
+                                                                "name": "render_source",
+                                                                "label": "合并后页面源码(页面元信息+页面源码)",
+                                                                "language": "json",
+                                                                "className": "h-full editor-full",
+                                                                "size": "xxl",
+                                                                "value": renderSource
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
                                             }
                                         ]
                                     },
