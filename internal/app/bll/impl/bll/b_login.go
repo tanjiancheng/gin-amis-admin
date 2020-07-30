@@ -2,6 +2,7 @@ package bll
 
 import (
 	"context"
+	"fmt"
 	"github.com/casbin/casbin/v2"
 	"net/http"
 	"sort"
@@ -241,6 +242,41 @@ func (a *Login) QueryUserMenuTree(ctx context.Context, userID string) (schema.Me
 		return nil, err
 	}
 	return menuResult.Data.FillMenuAction(menuActionResult.Data.ToMenuIDMap()).ToTree(), nil
+}
+
+func (a *Login) Permissions(ctx context.Context, userID string) (schema.Permissions, error) {
+	var permissions schema.Permissions
+	menuTree, err := a.QueryUserMenuTree(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+	for _, menuItem := range menuTree {
+		menuItemRoute := menuItem.Router
+		if menuItem.Actions != nil { //
+			for _, menuAction := range menuItem.Actions {
+				actionCode := menuAction.Code
+				permissions = append(permissions, fmt.Sprintf("%s::%s", menuItemRoute, actionCode))
+			}
+		}
+		if menuItem.Actions == nil && menuItem.Children == nil {
+			permissions = append(permissions, menuItemRoute) //不包括动作
+		} else {
+			if menuItem.Children != nil {
+				for _, childrenItem := range *menuItem.Children {
+					childrenRouter := childrenItem.Router
+					if childrenItem.Actions == nil {
+						permissions = append(permissions, childrenRouter) //不包括动作
+					} else {
+						for _, childrenAction := range childrenItem.Actions {
+							actionCode := childrenAction.Code
+							permissions = append(permissions, fmt.Sprintf("%s::%s", childrenRouter, actionCode))
+						}
+					}
+				}
+			}
+		}
+	}
+	return permissions, nil
 }
 
 // UpdatePassword 更新当前用户登录密码

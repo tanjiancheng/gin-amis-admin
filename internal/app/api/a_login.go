@@ -169,6 +169,19 @@ func (a *Login) QueryUserMenuTree(c *gin.Context) {
 	ginplus.ResList(c, menus)
 }
 
+func (a *Login) Permissions(c *gin.Context) {
+	ctx := c.Request.Context()
+	permissions, err := a.LoginBll.Permissions(ctx, ginplus.GetUserID(c))
+	if err != nil {
+		ginplus.ResCustomError(c, err)
+		return
+	}
+	ginplus.ResCustomSuccess(c, map[string]interface{}{
+		"permissions": permissions,
+	})
+
+}
+
 // UpdatePassword 更新个人密码
 func (a *Login) UpdatePassword(c *gin.Context) {
 	ctx := c.Request.Context()

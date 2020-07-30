@@ -16,6 +16,8 @@ type UserLoginInfo struct {
 	Roles    Roles  `json:"roles"`     // 角色列表
 }
 
+type Permissions []string
+
 // UpdatePasswordParam 更新密码请求参数
 type UpdatePasswordParam struct {
 	OldPassword string `json:"old_password" binding:"required"` // 旧密码(md5加密)

@@ -81,6 +81,10 @@
                         },
                         {
                             "type": "html",
+                            "html": "<p>其中<code>acl.can('*')</code>标识按钮权限控制，*表示允许所有访问，实际请替换<code>路由::动作编号的格式，eg:/system/menu::query</code></p>"
+                        },
+                        {
+                            "type": "html",
                             "html": "<p>其中@meta.fields为特殊字段,里面可以根据字段定义场景然后在源码中通过<code>@meta.scene.场景名称</code>引用到,比如以下格式的字段</p>"
                         },
                         {
@@ -271,7 +275,7 @@
                         },
                         {
                             "type": "html",
-                            "html": "<p>请求的数据外部接口是否有相关的功能权限允许访问，这里需要在header里面带上Authorization传递给第三方接口，后续第三方接口可以调用平台的接口拉取对应的权限列表自行判断是否满足访问权限，代码如下:"
+                            "html": "<p>请求的数据外部接口是否有相关的功能权限允许访问，这里需要在header里面带上Authorization传递给第三方接口，后续第三方接口可以调用平台的获取权限列表方法，使用<code>GET</code>方法请求<code>/api/v1/pub/current/permissions</code>,在header里面带上Authorization传递过来的值拉取对应的权限列表自行判断是否满足访问权限，代码如下:"
                         },
                         {
                             "title": "",
@@ -289,6 +293,71 @@
                         {
                             "type": "html",
                             "html": "其中\\${_authorization}是系统登录后生成的jwt字符串全局变量，可以在页面中引用到，更多全局变量的说明可以查看<a>系统管理/系统配置中</a>的全局变量配置"
+                        },
+                        {
+                            "type": "html",
+                            "html": "<br>返回的权限列表格式如下:  "
+                        },
+                        {
+                            "label": "试一试获取当前权限列表",
+                            "level": "primary",
+                            "type": "button",
+                            "actionType": "ajax",
+                            "confirmText": "",
+                            "messages": {
+                                "success": "获取权限列表成功!"
+                            },
+                            "api": {
+                                "url": "${_page_schema_api|raw}/api/v1/pub/current/permissions",
+                                "method": "get",
+                                "headers": {
+                                    "Authorization": "${_authorization}"
+                                }
+                            },
+                            "feedback": {
+                                "title": "权限列表",
+                                "size": "md",
+                                "body": {
+                                    "type": "form",
+                                    "controls": [
+                                        {
+                                            "type": "json-editor",
+                                            "name": "permissions"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "title": "",
+                            "type": "form",
+                            "autoFocus": false,
+                            "submitText": null,
+                            "actions": [],
+                            "controls": [
+                                {
+                                    "type": "json-editor",
+                                    "value": "{\"status\":0,\"msg\":\"OK\",\"data\":{\"permissions\":[\"/dashboard\",\"/pages/example\",\"/system/menu::add\",\"/system/menu::edit\",\"/system/menu::del\",\"/system/menu::query\",\"/system/role::add\",\"/system/role::edit\",\"/system/role::del\",\"/system/role::query\",\"/system/user::add\",\"/system/user::edit\",\"/system/user::del\",\"/system/user::query\",\"/system/setting\",\"/system/platforms::add\",\"/system/platforms::query\",\"/system/platforms::enter\",\"/system/platforms::enable\",\"/system/platforms::disable\",\"/tools/page_manager::add\",\"/tools/page_manager::view\",\"/tools/page_manager::edit\",\"/tools/page_manager::del\",\"/tools/page_manager::query\",\"/tools/page_manager::clone\",\"/tools/page_manager::preview\",\"/tools/page_manager::history-preview\",\"/tools/page_manager::push-to-menu\",\"/tools/tpl_mall::add\",\"/tools/tpl_mall::create_page\",\"/tools/tpl_mall::query\",\"/tools/tpl_mall::preview\",\"/tools/tpl_mall::edit\",\"/tools/tpl_mall::delete\"]}}"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "html",
+                            "html": "<p>开发者拿到用户权限列表之后，可以在业务代码层判断用户是否具备某一特定权限，如：</p>"
+                        },
+                        {
+                            "title": "",
+                            "type": "form",
+                            "autoFocus": false,
+                            "submitText": null,
+                            "actions": [],
+                            "controls": [
+                                {
+                                    "type": "editor",
+                                    "langage": "php",
+                                    "value": "if (!in_array(\"/tools/page_manager: :preview\", data.permissions)) {\n    return \"Permission Denied\";\n}"
+                                }
+                            ]
                         }
                     ]
                 },
@@ -307,6 +376,10 @@
                         {
                             "type": "html",
                             "html": "<p><code>注:</code>以上变量可以直接在页面源码里面调用到对应的值</p>"
+                        },
+                        {
+                            "type": "html",
+                            "html": "<p>需要更多的自定义系统配置请移步到<a>系统管理/系统配置中</a>配置</p>"
                         }
                     ]
                 }

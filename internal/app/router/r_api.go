@@ -38,6 +38,7 @@ func (a *Router) RegisterAPI(app *gin.Engine) {
 				gCurrent.PUT("password", a.LoginAPI.UpdatePassword)
 				gCurrent.GET("user", a.LoginAPI.GetUserInfo)
 				gCurrent.GET("menutree", a.LoginAPI.QueryUserMenuTree)
+				gCurrent.GET("permissions", a.LoginAPI.Permissions)
 			}
 
 			gPubSetting := pub.Group("setting")

@@ -61,3 +61,4 @@ pack-windows-amd64: build-windows-amd64
 	cp scripts/pack/* $(RELEASE_SERVER)
 	mv $(RELEASE_SERVER)/$(APP)-windows-4.0-amd64.exe $(RELEASE_SERVER)/$(APP).exe
 	cd $(RELEASE_ROOT) && tar -zcvf $(APP)-windows-4.0-amd64.tar.gz ${APP} && sudo rm -rf ${APP}
+pack-all: pack pack-darwin pack-windows-386 pack-windows-amd64
