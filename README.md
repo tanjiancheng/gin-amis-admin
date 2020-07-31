@@ -45,6 +45,24 @@ go get -u github.com/swaggo/swag/cmd/swag
 
 ## 快速开始
 
+[在线预览](http://amis.tanjiancheng.top:10088/#/dashboard)
+
+测试用户名：root
+
+测试密码：root
+
+> 二进制包执行
+
+[https://github.com/tanjiancheng/gin-amis-admin/releases](https://github.com/tanjiancheng/gin-amis-admin/releases)
+下载对应的平台版本执行启动命令
+```
+# linux/drawin
+make start
+# windows
+双击start.bat
+```
+
+> 源码执行
 ```bash
 $ go get -u -v github.com/tanjiancheng/gin-amis-admin/cmd/gin-admin
 $ cd $GOPATH/src/github.com/LyricTian/gin-admin
