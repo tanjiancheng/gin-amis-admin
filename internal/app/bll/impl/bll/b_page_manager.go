@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/tanjiancheng/gin-amis-admin/internal/app/config"
+	"github.com/tanjiancheng/gin-amis-admin/internal/app/iutil"
 	"github.com/tanjiancheng/gin-amis-admin/pkg/errors"
 	"os"
 	"strconv"
@@ -103,6 +104,11 @@ func (a *PageManager) GetByRoute(ctx context.Context, route string, opts ...sche
 // 查询指定数据
 func (a *PageManager) Get(ctx context.Context, id string, opts ...schema.PageManagerQueryOptions) (*schema.PageManager, error) {
 	item, err := a.PageManagerModel.Get(ctx, id, opts...)
+	meta := item.Meta
+	source := item.Source
+	jsonPathx := new(iutil.JsonPathx)
+	item.Source, err = jsonPathx.Search(meta, source)
+
 	if err != nil {
 		return nil, err
 	} else if item == nil {
