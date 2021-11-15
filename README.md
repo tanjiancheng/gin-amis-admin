@@ -46,6 +46,8 @@ go get -u github.com/swaggo/swag/cmd/swag
 ## 快速开始
 
 [在线预览](http://amis.tanjiancheng.top:10088/#/dashboard)
+> 域名已失效，请先绑定host   
+> 123.207.62.203 amis.tanjiancheng.top 
 
 测试用户名：root
 
