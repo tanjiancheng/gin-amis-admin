@@ -12,7 +12,6 @@ require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.0 // indirect
 	github.com/denisenkom/go-mssqldb v0.0.0-20200428022330-06a60b6afbbc // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/elliotchance/orderedmap v1.3.0
 	github.com/fatih/camelcase v1.0.0 // indirect
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
@@ -48,10 +47,8 @@ require (
 	github.com/swaggo/gin-swagger v1.2.0
 	github.com/swaggo/swag v1.6.5
 	github.com/tidwall/buntdb v1.1.2
-	github.com/tidwall/gjson v1.6.0 // indirect
-	github.com/tidwall/pretty v1.0.1 // indirect
+	github.com/tidwall/gjson v1.9.3 // indirect
 	github.com/urfave/cli/v2 v2.2.0
-	github.com/virtuald/go-ordered-json v0.0.0-20170621173500-b18e6e673d74 // indirect
 	go.mongodb.org/mongo-driver v1.3.3
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
 	golang.org/x/net v0.0.0-20200506145744-7e3656a0809f // indirect
